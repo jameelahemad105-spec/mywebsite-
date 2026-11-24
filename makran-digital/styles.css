@@ -22,3 +22,7 @@
 .account-panel .field-optional{font-size:10px;font-weight:500;color:#8a938d}
 .dash-field select{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #dfe2dc;background:#fdfdfb;font:12px "DM Sans";color:var(--ink)}
 @media(max-width:620px){.profile-form-grid{grid-template-columns:1fr;gap:0}}
+
+/* Owner credit and expanded account dashboard */
+.footer-owner{max-width:1180px;margin:22px auto 0;padding:18px 0 0;border-top:1px solid #31464b;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.footer-owner span{font-size:9px;letter-spacing:.16em;color:#c5ae78;font-weight:700}.footer-owner strong{font:700 15px Manrope;color:#fff}.footer-owner small{font-size:10px;color:#aab9b4}.profile-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.profile-summary>div{background:#f7f6f1;padding:13px;border:1px solid #eeece3;min-width:0}.profile-summary span,.profile-summary b{display:block}.profile-summary span{font-size:9px;letter-spacing:.12em;color:#8a7956;font-weight:700;margin-bottom:6px}.profile-summary b{font-size:12px;color:#354c49;overflow-wrap:anywhere}.dash-field textarea{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #dfe2dc;background:#fdfdfb;font:12px "DM Sans";color:var(--ink);resize:vertical}
+@media(max-width:620px){.profile-summary{grid-template-columns:1fr}.footer-owner{gap:8px}.footer-owner small{width:100%}}
