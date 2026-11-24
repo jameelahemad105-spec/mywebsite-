@@ -26,3 +26,22 @@
 /* Owner credit and expanded account dashboard */
 .footer-owner{max-width:1180px;margin:22px auto 0;padding:18px 0 0;border-top:1px solid #31464b;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.footer-owner span{font-size:9px;letter-spacing:.16em;color:#c5ae78;font-weight:700}.footer-owner strong{font:700 15px Manrope;color:#fff}.footer-owner small{font-size:10px;color:#aab9b4}.profile-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.profile-summary>div{background:#f7f6f1;padding:13px;border:1px solid #eeece3;min-width:0}.profile-summary span,.profile-summary b{display:block}.profile-summary span{font-size:9px;letter-spacing:.12em;color:#8a7956;font-weight:700;margin-bottom:6px}.profile-summary b{font-size:12px;color:#354c49;overflow-wrap:anywhere}.dash-field textarea{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #dfe2dc;background:#fdfdfb;font:12px "DM Sans";color:var(--ink);resize:vertical}
 @media(max-width:620px){.profile-summary{grid-template-columns:1fr}.footer-owner{gap:8px}.footer-owner small{width:100%}}
+
+/* Refined account experience and founder credit */
+.account-panel{border-radius:10px;padding:clamp(20px,3vw,34px)}
+.account-tabs{gap:12px}
+.account-tab{padding:14px 18px;border-radius:6px 6px 0 0}
+.account-panel form>label{font-size:12px;line-height:1.45}
+.account-panel form>label input,.account-panel form>label select,.account-panel form>label textarea,.dash-field input,.dash-field textarea{border-radius:6px;min-height:44px;transition:border-color .18s,box-shadow .18s}
+.account-panel input:focus,.account-panel select:focus,.account-panel textarea:focus,.dash-field input:focus,.dash-field textarea:focus{outline:none;border-color:#a98a4d;box-shadow:0 0 0 3px #d7b66d33}
+.account-panel input[type="password"]{letter-spacing:.08em}
+.account-panel fieldset{border:1px solid #e7e5dc;border-radius:8px;padding:16px}
+.account-panel legend{padding:0 7px}
+.role-option{border-radius:6px;transition:background .15s,border-color .15s}
+.role-option:has(input:checked){background:#f5f1e7;border-color:#c8b27c}
+.account-panel .button{min-height:48px;border-radius:6px}
+.form-feedback{font-size:11px;min-height:18px}
+.footer-owner{align-items:center;gap:10px 14px}
+.footer-owner strong{font-size:16px}
+.footer-owner small{font-size:11px}
+@media(max-width:620px){.account-panel{padding:18px}.account-tabs{display:grid;grid-template-columns:1fr 1fr}.account-tab{padding:12px 8px}.role-option{padding:13px}.footer-owner{align-items:flex-start;flex-direction:column;gap:6px}}
