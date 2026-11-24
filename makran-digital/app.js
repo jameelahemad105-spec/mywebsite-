@@ -48,10 +48,10 @@ function normalizeSearch(value){
  for(const [phrase,replacement] of Object.entries(searchAliases)){
   if(q===phrase||q.includes(phrase)) q=q.replace(phrase,replacement);
  }
- return q.replace(/\\s+/g," ").trim();
+ return q.replace(/\s+/g," ").trim();
 }
 function render(){
- const raw=searchInput.value.trim(),q=normalizeSearch(raw),cat=categoryFilter.value,terms=q.split(/\\s+/).filter(Boolean);
+ const raw=searchInput.value.trim(),q=normalizeSearch(raw),cat=categoryFilter.value,terms=q.split(/\s+/).filter(Boolean);
  const filtered=posts.filter(p=>{
   if(cat!=="all"&&p.category!==cat)return false;
   const hay=normalizeSearch([p.title,p.description,p.location,p.type,labels[p.category],p.tags||""].join(" "));
