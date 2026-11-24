@@ -64,3 +64,14 @@ body.auth-locked> :not(#access-gate){visibility:hidden!important;pointer-events:
 #access-gate .account-panel{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e5dfd1;box-shadow:0 20px 65px #06171b66}
 .access-footnote{text-align:center;color:#9fb2ad;font-size:10px;margin:15px 0 0}
 @media(max-width:620px){#access-gate{padding:20px 12px;align-items:flex-start}.access-brand{margin-bottom:22px}.access-welcome{margin-bottom:17px}.access-welcome p{font-size:12px}#access-gate .account-panel{padding:17px}}
+
+
+/* Free public-web discovery and instant topic summary */
+.web-search-links{display:flex;justify-content:center;gap:10px 20px;flex-wrap:wrap;margin:15px auto 4px}
+.web-search-links a{font-weight:700;font-size:11px}
+.instant-answer{max-width:760px;margin:18px auto 0;padding:16px 18px;text-align:left;background:#f7f5ef;border:1px solid #e8e2d5;border-radius:5px}
+.instant-answer-label{font-size:9px;letter-spacing:.13em;font-weight:800;color:#92743e;margin-bottom:8px}
+.instant-answer p{font-size:12px;line-height:1.7;color:#405653;margin:0 0 8px}
+.instant-answer a{font-size:11px;color:#8a6b35;font-weight:700}
+.instant-answer small{font-size:11px;line-height:1.6;color:#73817d}
+@media(max-width:620px){.web-search-links{gap:10px 14px}.instant-answer{padding:13px;text-align:left}}
