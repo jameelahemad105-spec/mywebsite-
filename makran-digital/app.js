@@ -1,6 +1,6 @@
 /* Makran Digital student directory. Search covers this curated catalogue, not the whole live internet. */
-const SUPABASE_URL="YOUR_SUPABASE_PROJECT_URL";
-const SUPABASE_ANON_KEY="YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_URL="https://gamndpogjznmdccgmanr.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_I9gufeecgDjFz4ybGxLT_g_qG7SphB1";
 const TABLE="opportunities";
 const resources=[
 {id:"usat",category:"tests",title:"USAT — Undergraduate Studies Admission Test (HEC ETC)",description:"Official HEC Education Testing Council portal for USAT registration, test information and candidate updates.",location:"Pakistan · HEC",url:"https://etc.hec.gov.pk/",type:"Official test portal",tags:"usat usa test usat-e usat e undergraduate studies admission test pre engineering pre-engineering pre medical pre-medical etc hec entry test admission test"},
@@ -84,90 +84,3 @@ document.querySelector("#year").textContent=new Date().getFullYear();render();lo
 
 
 
-/* Personal dashboard preview and deadline-alert preferences.
-   Email delivery requires authenticated backend, scheduled worker and email provider. */
-(()=>{
- const signup=document.querySelector("#demo-signup"),signin=document.querySelector("#demo-signin");
- const feedback=document.querySelector("#account-feedback"),dashboard=document.querySelector("#demo-dashboard");
- const tabs=[...document.querySelectorAll(".account-tab")];
- const profileKey="makranDigitalPreviewProfile";
- let memoryProfile=null;
- const readProfile=()=>{try{return JSON.parse(localStorage.getItem(profileKey)||"null")||memoryProfile}catch{return memoryProfile}};
- const saveProfile=p=>{memoryProfile=p;try{localStorage.setItem(profileKey,JSON.stringify(p));return true}catch(error){console.warn("Makran Digital could not write browser storage:",error);return false}};
- function showTab(tab){
-  tabs.forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
-  signup.hidden=tab!=="signup";signin.hidden=tab!=="signin";dashboard.hidden=true;
- }
- tabs.forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
- function showDashboard(profile){
-  signup.hidden=true;signin.hidden=true;dashboard.hidden=false;
-  tabs.forEach(b=>b.classList.remove("active"));
-  const categories=["Scholarships","Jobs & internships","Skills & training","Admissions & tests","Community opportunities"];
-  dashboard.innerHTML=`
-   <div class="dashboard-top"><div><span class="eyebrow dark-eyebrow">YOUR PERSONAL SPACE</span><h3 class="dash-welcome">Welcome, ${escapeHtml(profile.name)}</h3></div><button type="button" id="preview-signout">Sign out</button></div>
-   <p class="dash-email">${escapeHtml(profile.email)}</p>
-   <div class="dashboard-nav"><button class="dash-nav active" data-view="overview">Overview</button><button class="dash-nav" data-view="saved">Saved opportunities</button><button class="dash-nav" data-view="alerts">Deadline alerts</button><button class="dash-nav" data-view="profile">My profile</button></div>
-   <section class="dash-view" data-panel="overview"><div class="dash-stats"><div><b>${profile.roles.length}</b><span>Account types</span></div><div><b>${profile.saved?.length||0}</b><span>Saved items</span></div><div><b>${profile.alerts?.enabled?"ON":"OFF"}</b><span>Email alerts</span></div></div><div class="profile-summary"><div><span>FULL NAME</span><b>${escapeHtml(profile.name||"Not provided")}</b></div><div><span>LOCATION</span><b>${escapeHtml([profile.city,profile.province,profile.country].filter(Boolean).join(", ")||"Not provided")}</b></div><div><span>EDUCATION</span><b>${escapeHtml(profile.education||"Not added yet")}</b></div><div><span>OCCUPATION</span><b>${escapeHtml(profile.occupation||"Not added yet")}</b></div></div><h4>Your account types</h4><div class="dashboard-roles">${profile.roles.map(r=>'<span>'+escapeHtml(r)+'</span>').join("")}</div><p class="dashboard-message">Manage your personal details, explore opportunities, and update your interests from the sections above. This is a local preview profile, not a secure online account yet.</p><button type="button" class="button button-dark" id="edit-profile-shortcut">Complete / edit my profile</button></section>
-   <section class="dash-view" data-panel="saved" hidden><h4>Saved opportunities</h4><p class="dash-muted">Your saved listings will appear here. Saving live listings will be enabled with the connected account database.</p><div class="saved-preview">${(profile.saved||[]).length?profile.saved.map(x=>'<div>'+escapeHtml(x)+'</div>').join(""):'No opportunities saved yet.'}</div></section>
-   <section class="dash-view" data-panel="alerts" hidden><h4>Deadline email reminders</h4><p class="dash-muted">Choose the updates you want. The planned reminder is sent 2 days (48 hours) before an opportunity deadline.</p><label class="alert-toggle"><input type="checkbox" id="alerts-enabled" ${profile.alerts?.enabled?"checked":""}><span><b>Enable email reminders</b><small>Receive deadline alerts at your account email.</small></span></label><label class="dash-field">Notification email<input id="alerts-email" type="email" value="${escapeHtml(profile.alerts?.email||profile.email)}" placeholder="you@example.com"></label><div class="alert-categories"><b>Notify me about</b>${categories.map((c,i)=>'<label><input type="checkbox" class="alert-category" value="'+i+'" '+((profile.alerts?.categories||[0,1,2,3,4]).includes(i)?"checked":"")+'>'+c+'</label>').join("")}</div><div class="alert-timing"><span>Reminder timing</span><b>2 days before deadline</b></div><button type="button" class="button button-dark" id="save-alerts">Save notification preferences</button><p class="form-feedback" id="alert-feedback" role="status">Preview only: preferences are saved in this browser. Automatic email delivery will start after backend and email-service setup.</p></section>
-   <section class="dash-view" data-panel="profile" hidden><h4>Personal profile</h4>
-    <div class="profile-form-grid"><label class="dash-field">First name<input id="profile-firstName" value="${escapeHtml(profile.firstName||"")}" maxlength="60"></label><label class="dash-field">Last name<input id="profile-lastName" value="${escapeHtml(profile.lastName||"")}" maxlength="60"></label></div>
-    <label class="dash-field">Father's name<input id="profile-fatherName" value="${escapeHtml(profile.fatherName||"")}" maxlength="100"></label>
-    <label class="dash-field">Email address<input value="${escapeHtml(profile.email)}" disabled></label>
-    <label class="dash-field">Phone number<input id="profile-phone" type="tel" value="${escapeHtml(profile.phone||"")}" maxlength="25"></label>
-    <div class="profile-form-grid"><label class="dash-field">Country<input id="profile-country" value="${escapeHtml(profile.country||"")}" maxlength="80"></label><label class="dash-field">Province / State<input id="profile-province" value="${escapeHtml(profile.province||"")}" maxlength="80"></label></div>
-    <div class="profile-form-grid"><label class="dash-field">Region / District<input id="profile-region" value="${escapeHtml(profile.region||"")}" maxlength="100"></label><label class="dash-field">City<input id="profile-city" value="${escapeHtml(profile.city||"")}" maxlength="100"></label></div>
-    <label class="dash-field">Education / qualification (optional)<input id="profile-education" value="${escapeHtml(profile.education||"")}" maxlength="120" placeholder="e.g. Intermediate, Bachelor's degree"></label>
-    <label class="dash-field">Current occupation (optional)<input id="profile-occupation" value="${escapeHtml(profile.occupation||"")}" maxlength="120" placeholder="e.g. Student, Teacher, Software Developer"></label>
-    <label class="dash-field">Skills and interests (optional)<textarea id="profile-skills" maxlength="500" rows="3" placeholder="Add skills or areas you are interested in">${escapeHtml(profile.skills||"")}</textarea></label>
-    <label class="dash-field">Residential address (optional)<input id="profile-address" value="${escapeHtml(profile.address||"")}" maxlength="180"></label>
-    <p class="dash-muted">We do not ask for religion, national ID, passwords, or financial information. Only add details needed for your opportunities.</p>
-    <div class="dashboard-roles">${profile.roles.map(r=>'<span>'+escapeHtml(r)+'</span>').join("")}</div><p class="dash-muted">Your profile is currently stored only in this browser preview. Do not enter information you do not want stored on this device.</p><button type="button" class="button button-dark" id="save-profile">Save profile preview</button><p class="form-feedback" id="profile-feedback" role="status"></p></section>`;
-  dashboard.querySelector("#edit-profile-shortcut").addEventListener("click",()=>dashboard.querySelector('[data-view="profile"]').click());
-  dashboard.querySelectorAll(".dash-nav").forEach(btn=>btn.addEventListener("click",()=>{
-   dashboard.querySelectorAll(".dash-nav").forEach(x=>x.classList.toggle("active",x===btn));
-   dashboard.querySelectorAll(".dash-view").forEach(x=>x.hidden=x.dataset.panel!==btn.dataset.view);
-  }));
-  dashboard.querySelector("#preview-signout").addEventListener("click",()=>showTab("signup"));
-  dashboard.querySelector("#save-alerts").addEventListener("click",()=>{
-   const email=dashboard.querySelector("#alerts-email").value.trim();
-   if(dashboard.querySelector("#alerts-enabled").checked&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){dashboard.querySelector("#alert-feedback").textContent="Enter a valid email address.";return}
-   profile.alerts={enabled:dashboard.querySelector("#alerts-enabled").checked,email,categories:[...dashboard.querySelectorAll(".alert-category:checked")].map(x=>Number(x.value)),daysBefore:2};
-   const savedToBrowser=saveProfile(profile);dashboard.querySelector("#alert-feedback").textContent=savedToBrowser?"Preferences saved in this browser. Real email alerts still need backend integration.":"Preferences are active for this session, but browser storage is blocked; they may be lost after reload.";
-   dashboard.querySelector(".dash-stats div:nth-child(3) b").textContent=profile.alerts.enabled?"ON":"OFF";
-  });
-  dashboard.querySelector("#save-profile").addEventListener("click",()=>{
-   const required=["firstName","lastName","fatherName","phone","country","province","region","city"];
-   for(const key of required){
-    const field=dashboard.querySelector("#profile-"+key);
-    if(!field||!field.value.trim()){
-     dashboard.querySelector("#profile-feedback").textContent="Please complete all required profile fields before saving.";
-     if(field)field.focus();
-     return;
-    }
-   }
-   ["firstName","lastName","fatherName","phone","country","province","region","city","address","education","occupation","skills"].forEach(key=>{
-    const field=dashboard.querySelector("#profile-"+key);if(field)profile[key]=field.value.trim();
-   });
-   profile.name=[profile.firstName,profile.lastName].filter(Boolean).join(" ")||profile.name;
-   const savedToBrowser=saveProfile(profile);
-   dashboard.querySelector("#profile-feedback").textContent=savedToBrowser
-    ?"Profile saved successfully on this device. It is not yet synced to an online account."
-    :"Your changes are active for this session, but this browser blocked storage. They may be lost when you close or reload this page.";
-   dashboard.querySelector(".dash-welcome").textContent="Welcome, "+(profile.firstName||profile.name);
-  });
- }
- signup.addEventListener("submit",event=>{
-  event.preventDefault();const data=new FormData(signup),roles=data.getAll("roles");
-  if(!roles.length){feedback.textContent="Please select at least one account type.";return}
-  const firstName=String(data.get("firstName")).trim(),lastName=String(data.get("lastName")).trim(),email=String(data.get("email")).trim().toLowerCase();
-  const profile={firstName,lastName,name:[firstName,lastName].filter(Boolean).join(" "),fatherName:String(data.get("fatherName")).trim(),email,phone:String(data.get("phone")).trim(),country:String(data.get("country")).trim(),province:String(data.get("province")).trim(),region:String(data.get("region")).trim(),city:String(data.get("city")).trim(),address:String(data.get("address")).trim(),education:String(data.get("education")||"").trim(),occupation:String(data.get("occupation")||"").trim(),skills:String(data.get("skills")||"").trim(),roles,alerts:{enabled:false,email,categories:[0,1,2,3,4],daysBefore:2},saved:[]};
-  const savedToBrowser=saveProfile(profile);showDashboard(profile);feedback.textContent=savedToBrowser?"Preview profile created and saved on this device. This is not a secure online account.":"Preview profile opened for this session, but browser storage is blocked; it may be lost after reload.";
- });
- signin.addEventListener("submit",event=>{
-  event.preventDefault();const email=String(new FormData(signin).get("email")).trim().toLowerCase(),profile=readProfile();
-  if(!profile||profile.email!==email){signin.querySelector(".form-feedback").textContent="No matching preview profile found in this browser. Create a preview profile first.";return}
-  showDashboard(profile);
- });
- const existing=readProfile();if(existing)showDashboard(existing);
-})();
