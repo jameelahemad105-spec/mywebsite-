@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#102b35">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="description" content="Makran Digital — opportunities, education, jobs and career pathways for everyone in Makran and beyond.">
   <title>Makran Digital — Opportunities for Everyone</title>
@@ -12,7 +12,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="app.js" defer></script>
 </head>
 <body>
   <div class="topline">OPPORTUNITIES, EDUCATION & CAREERS · FOR EVERYONE IN MAKRAN</div>
@@ -87,7 +86,7 @@
     </section>
     <section class="account-section" id="account">
       <div class="account-wrap">
-        <div class="account-intro"><div class="eyebrow dark-eyebrow">YOUR MAKRAN DIGITAL PROFILE</div><h2>One account.<br><em>More possibilities.</em></h2><p>Create your personal space, manage your selected account types, save opportunities and choose which deadline reminders you want. Secure online accounts will be activated when the backend is connected.</p><div class="account-note"><b>Profile information:</b> Name, father's name, email, phone and location help create your profile. Education, occupation, skills and address are optional.<br><br><b>Privacy:</b> This is currently a browser-only preview, not secure online registration. We do not request religion, national ID, passwords or financial information. Avoid entering sensitive information until secure account storage is connected.</div></div>
+        <div class="account-intro"><div class="eyebrow dark-eyebrow">YOUR MAKRAN DIGITAL PROFILE</div><h2>One account.<br><em>More possibilities.</em></h2><p>Create your personal space, manage your selected account types, save opportunities and choose which deadline reminders you want. Sign in to manage your profile, selected pathways and personal opportunities.</p><div class="account-note"><b>Profile information:</b> Name, father's name, email, phone and location help create your profile. Education, occupation, skills and address are optional.<br><br><b>Privacy:</b> Your password is used only for secure sign-in and is never displayed in your profile. Your private profile is linked to your own account. Do not share your password or verification codes.</div></div>
         <div class="account-panel" id="account-panel">
           <div class="account-tabs"><button type="button" class="account-tab active" data-tab="signup">Create account</button><button type="button" class="account-tab" data-tab="signin">Sign in</button></div>
           <form id="demo-signup">
@@ -118,8 +117,8 @@
               <label class="role-option"><input type="checkbox" name="roles" value="General User"> <span><b>General User</b><small>Community and general opportunities</small></span></label>
               <label class="role-option"><input type="checkbox" name="roles" value="Employer / Organization"> <span><b>Employer / Organization</b><small>Share opportunities with the community</small></span></label>
             </fieldset>
-            <button class="button button-dark" type="submit">Create preview profile <span>↗</span></button>
-            <p class="form-feedback" id="account-feedback" role="status">This preview saves a basic profile in this browser only. It is not a real online account.</p>
+            <button class="button button-dark" type="submit">Create secure account <span>↗</span></button>
+            <p class="form-feedback" id="account-feedback" role="status">Your information is saved to your private online profile after successful registration.</p>
           </form>
           <form id="demo-signin" hidden><label>Email address<input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label><label>Password<input name="password" type="password" required minlength="8" autocomplete="current-password" placeholder="Your password"></label><button class="button button-dark" type="submit">Sign in securely <span>↗</span></button><p class="form-feedback" role="status">Sign in with your Makran Digital email and password.</p></form>
           <div id="demo-dashboard" hidden></div>
@@ -128,7 +127,7 @@
     </section>
   </main>
 
-  <footer><div class="footer-inner"><a class="brand footer-brand" href="#home"><span class="brand-mark">M</span><span>MAKRAN <b>DIGITAL</b><small>CONNECTING PEOPLE. OPENING OPPORTUNITIES.</small></span></a><p>Made for the ambitions of people across Makran and beyond.</p><span>© <span id="year"></span> MAKRAN DIGITAL</span></div><div class="footer-owner"><span>FOUNDER & PROJECT LEAD</span><strong>Jameel Ahemad</strong><small>Makran Digital · Independent community opportunity platform</small></div><div class="footer-note">Makran Digital is an independent opportunity information hub, not a scholarship provider or testing authority. Always verify eligibility, acceptance, fees and deadlines on the official provider's website. Never share passwords, OTPs or payment details with unverified agents. This preview does not provide secure online accounts yet.</div></footer>
+  <footer><div class="footer-inner"><a class="brand footer-brand" href="#home"><span class="brand-mark">M</span><span>MAKRAN <b>DIGITAL</b><small>CONNECTING PEOPLE. OPENING OPPORTUNITIES.</small></span></a><p>Made for the ambitions of people across Makran and beyond.</p><span>© <span id="year"></span> MAKRAN DIGITAL</span></div><div class="footer-owner"><span>FOUNDER & PROJECT LEAD</span><strong>Jameel Ahemad</strong><small>Student, Bahria Model College Turbat · Independent community opportunity platform</small></div><div class="footer-note">Makran Digital is an independent opportunity information hub, not a scholarship provider or testing authority. Always verify eligibility, acceptance, fees and deadlines on the official provider's website. Never share passwords, OTPs or payment details with unverified agents. Accounts are managed through Supabase authentication. Keep your password and verification codes private.</div></footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./app.js"></script>
   <script src="./auth.js"></script>
