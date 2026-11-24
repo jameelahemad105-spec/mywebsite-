@@ -214,6 +214,29 @@ practiceQuiz?.addEventListener("reset",()=>{
  practiceQuiz.querySelectorAll(".quiz-question").forEach(q=>{q.classList.remove("quiz-correct","quiz-incorrect");q.querySelector(".quiz-explanation")?.remove()});
  const result=document.querySelector("#quiz-results");if(result){result.hidden=true;result.textContent=""}
 });
+
+// Jobs & Internships Portal: filter the directory of trusted starting points.
+const jobsSearch=document.querySelector("#jobs-search");
+const jobsType=document.querySelector("#jobs-type");
+const jobsGrid=document.querySelector("#jobs-source-grid");
+const jobsEmpty=document.querySelector("#jobs-no-results");
+function filterJobSources(){
+ if(!jobsGrid)return;
+ const query=(jobsSearch?.value||"").toLowerCase().trim();
+ const type=jobsType?.value||"all";
+ let visible=0;
+ jobsGrid.querySelectorAll(".jobs-source-card").forEach(card=>{
+  const matchesType=type==="all"||card.dataset.type===type;
+  const hay=(card.dataset.search+" "+card.textContent).toLowerCase();
+  const matchesQuery=!query||query.split(/\\s+/).every(term=>hay.includes(term));
+  const show=matchesType&&matchesQuery;
+  card.hidden=!show;
+  if(show)visible++;
+ });
+ if(jobsEmpty)jobsEmpty.hidden=visible>0;
+}
+jobsSearch?.addEventListener("input",filterJobSources);
+jobsType?.addEventListener("change",filterJobSources);
 document.querySelector("#year").textContent=new Date().getFullYear();render();loadLivePosts();
 
 
