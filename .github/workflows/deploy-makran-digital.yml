@@ -5,6 +5,11 @@ on:
     branches: [main]
     paths:
       - 'makran-digital/**'
+      - 'index.html'
+      - 'script.js'
+      - 'style.css'
+      - 'birthday-admin.html'
+      - 'birthday-results-schema.sql'
       - '.github/workflows/deploy-makran-digital.yml'
   workflow_dispatch:
 
