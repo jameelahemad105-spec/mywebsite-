@@ -29,7 +29,7 @@
   <header class="site-header">
     <a class="brand" href="#home" aria-label="Makran Digital home"><span class="brand-mark">M</span><span>MAKRAN <b>DIGITAL</b><small>CONNECTING PEOPLE. OPENING OPPORTUNITIES.</small></span></a>
     <button class="menu-button" id="menu-button" aria-label="Open navigation" aria-expanded="false">☰</button>
-    <nav id="nav"><a href="#explore">Explore opportunities</a><a href="#test-centre">Test preparation</a><a href="#career-guidance">Career guidance</a><a href="#jobs-portal">Jobs & internships</a><a href="#documents">Document centre</a><a href="#pathways">Who we serve</a><a href="#account">Create account</a><a class="nav-submit" href="#submit">Post an opportunity <span>↗</span></a></nav>
+    <nav id="nav"><a href="#explore">Explore opportunities</a><a href="#test-centre">Test preparation</a><a href="#career-guidance">Career guidance</a><a href="#jobs-portal">Jobs & internships</a><a href="#documents">Document centre</a><a href="#community">Community</a><a href="#pathways">Who we serve</a><a href="#account">Create account</a><a class="nav-submit" href="#submit">Post an opportunity <span>↗</span></a></nav>
   </header>
 
   <main id="home">
@@ -300,9 +300,24 @@
     </section>
   </main>
 
+    <section class="section community-centre" id="community">
+      <div class="section-heading"><div><div class="eyebrow dark-eyebrow">CONNECT WITH THE NETWORK</div><h2>Makran Digital <em>Community.</em></h2><p>Ask questions, share useful knowledge and help others discover their next opportunity.</p></div><span class="section-number">08 / COMMUNITY</span></div>
+      <div class="community-guidelines"><b>A respectful space for everyone</b><p>Keep posts useful and respectful. Do not share passwords, OTPs, private documents, phone numbers or sensitive personal information. Verify opportunities through official sources. Report scams, harassment or misleading content.</p></div>
+      <div class="community-layout">
+        <form id="community-post-form" class="community-compose">
+          <div class="eyebrow dark-eyebrow">START A DISCUSSION</div><h3>Share something with the community</h3>
+          <label>Category<select name="category" required><option value="Scholarships">Scholarships</option><option value="Education & Admissions">Education & Admissions</option><option value="Jobs & Internships">Jobs & Internships</option><option value="Career & Skills">Career & Skills</option><option value="General Discussion">General Discussion</option></select></label>
+          <label>Post title<input name="title" type="text" minlength="5" maxlength="120" required placeholder="What would you like to discuss?"></label>
+          <label>Your message<textarea name="body" minlength="10" maxlength="2000" rows="5" required placeholder="Share a question, experience or useful information…"></textarea><small>10–2,000 characters. Posts are visible to signed-in community members.</small></label>
+          <button class="button button-dark" type="submit">Publish post</button><p id="community-feedback" class="community-feedback" role="status" aria-live="polite"></p>
+        </form>
+        <div class="community-discussions"><div class="community-feed-heading"><div><div class="eyebrow dark-eyebrow">LATEST DISCUSSIONS</div><h3>Community feed</h3></div><button type="button" id="community-refresh" class="community-refresh">Refresh feed ↻</button></div><div id="community-feed" aria-live="polite"><p class="community-status">Loading community discussions…</p></div></div>
+      </div>
+    </section>
   <footer><div class="footer-inner"><a class="brand footer-brand" href="#home"><span class="brand-mark">M</span><span>MAKRAN <b>DIGITAL</b><small>CONNECTING PEOPLE. OPENING OPPORTUNITIES.</small></span></a><p>Made for the ambitions of people across Makran and beyond.</p><span>© <span id="year"></span> MAKRAN DIGITAL</span></div><div class="footer-owner"><span>FOUNDER & PROJECT LEAD</span><strong>Jameel Ahemad</strong><small>Student, Bahria Model College Turbat · Independent community opportunity platform</small></div><div class="footer-note">Makran Digital is an independent opportunity information hub, not a scholarship provider or testing authority. Always verify eligibility, acceptance, fees and deadlines on the official provider's website. Never share passwords, OTPs or payment details with unverified agents. Accounts are managed through Supabase authentication. Keep your password and verification codes private.</div></footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./app.js"></script>
   <script src="./auth.js"></script>
+  <script src="./community.js"></script>
 </body>
 </html>
