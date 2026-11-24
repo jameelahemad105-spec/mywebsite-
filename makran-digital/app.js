@@ -109,7 +109,16 @@ document.querySelector("#year").textContent=new Date().getFullYear();render();lo
    <section class="dash-view" data-panel="overview"><div class="dash-stats"><div><b>${profile.roles.length}</b><span>Account types</span></div><div><b>${profile.saved?.length||0}</b><span>Saved items</span></div><div><b>${profile.alerts?.enabled?"ON":"OFF"}</b><span>Email alerts</span></div></div><h4>Your account types</h4><div class="dashboard-roles">${profile.roles.map(r=>'<span>'+escapeHtml(r)+'</span>').join("")}</div><p class="dashboard-message">Your dashboard is your personal starting point. Save opportunities from the directory and manage deadline reminders here.</p></section>
    <section class="dash-view" data-panel="saved" hidden><h4>Saved opportunities</h4><p class="dash-muted">Your saved listings will appear here. Saving live listings will be enabled with the connected account database.</p><div class="saved-preview">${(profile.saved||[]).length?profile.saved.map(x=>'<div>'+escapeHtml(x)+'</div>').join(""):'No opportunities saved yet.'}</div></section>
    <section class="dash-view" data-panel="alerts" hidden><h4>Deadline email reminders</h4><p class="dash-muted">Choose the updates you want. The planned reminder is sent 2 days (48 hours) before an opportunity deadline.</p><label class="alert-toggle"><input type="checkbox" id="alerts-enabled" ${profile.alerts?.enabled?"checked":""}><span><b>Enable email reminders</b><small>Receive deadline alerts at your account email.</small></span></label><label class="dash-field">Notification email<input id="alerts-email" type="email" value="${escapeHtml(profile.alerts?.email||profile.email)}" placeholder="you@example.com"></label><div class="alert-categories"><b>Notify me about</b>${categories.map((c,i)=>'<label><input type="checkbox" class="alert-category" value="'+i+'" '+((profile.alerts?.categories||[0,1,2,3,4]).includes(i)?"checked":"")+'>'+c+'</label>').join("")}</div><div class="alert-timing"><span>Reminder timing</span><b>2 days before deadline</b></div><button type="button" class="button button-dark" id="save-alerts">Save notification preferences</button><p class="form-feedback" id="alert-feedback" role="status">Preview only: preferences are saved in this browser. Automatic email delivery will start after backend and email-service setup.</p></section>
-   <section class="dash-view" data-panel="profile" hidden><h4>Personal profile</h4><label class="dash-field">Full name<input id="profile-name" value="${escapeHtml(profile.name)}" maxlength="100"></label><label class="dash-field">Email address<input value="${escapeHtml(profile.email)}" disabled></label><div class="dashboard-roles">${profile.roles.map(r=>'<span>'+escapeHtml(r)+'</span>').join("")}</div><p class="dash-muted">You can select multiple account types. Profile editing and role updates will be connected to secure accounts later.</p><button type="button" class="button button-dark" id="save-profile">Save profile preview</button><p class="form-feedback" id="profile-feedback" role="status"></p></section>`;
+   <section class="dash-view" data-panel="profile" hidden><h4>Personal profile</h4>
+    <div class="profile-form-grid"><label class="dash-field">First name<input id="profile-firstName" value="${escapeHtml(profile.firstName||"")}" maxlength="60"></label><label class="dash-field">Last name<input id="profile-lastName" value="${escapeHtml(profile.lastName||"")}" maxlength="60"></label></div>
+    <label class="dash-field">Father's name<input id="profile-fatherName" value="${escapeHtml(profile.fatherName||"")}" maxlength="100"></label>
+    <label class="dash-field">Email address<input value="${escapeHtml(profile.email)}" disabled></label>
+    <label class="dash-field">Phone number<input id="profile-phone" type="tel" value="${escapeHtml(profile.phone||"")}" maxlength="25"></label>
+    <div class="profile-form-grid"><label class="dash-field">Country<input id="profile-country" value="${escapeHtml(profile.country||"")}" maxlength="80"></label><label class="dash-field">Province / State<input id="profile-province" value="${escapeHtml(profile.province||"")}" maxlength="80"></label></div>
+    <div class="profile-form-grid"><label class="dash-field">Region / District<input id="profile-region" value="${escapeHtml(profile.region||"")}" maxlength="100"></label><label class="dash-field">City<input id="profile-city" value="${escapeHtml(profile.city||"")}" maxlength="100"></label></div>
+    <label class="dash-field">Residential address (optional)<input id="profile-address" value="${escapeHtml(profile.address||"")}" maxlength="180"></label>
+    <label class="dash-field">Religion (optional)<select id="profile-religion"><option value="">Prefer not to say</option>${["Islam","Christianity","Hinduism","Sikhism","Buddhism","Other"].map(x=>'<option value="'+x+'" '+(profile.religion===x?"selected":"")+'>'+x+'</option>').join("")}</select></label>
+    <div class="dashboard-roles">${profile.roles.map(r=>'<span>'+escapeHtml(r)+'</span>').join("")}</div><p class="dash-muted">Your profile is currently stored only in this browser preview. Do not enter information you do not want stored on this device.</p><button type="button" class="button button-dark" id="save-profile">Save profile preview</button><p class="form-feedback" id="profile-feedback" role="status"></p></section>`;
   dashboard.querySelectorAll(".dash-nav").forEach(btn=>btn.addEventListener("click",()=>{
    dashboard.querySelectorAll(".dash-nav").forEach(x=>x.classList.toggle("active",x===btn));
    dashboard.querySelectorAll(".dash-view").forEach(x=>x.hidden=x.dataset.panel!==btn.dataset.view);
@@ -123,14 +132,20 @@ document.querySelector("#year").textContent=new Date().getFullYear();render();lo
    dashboard.querySelector(".dash-stats div:nth-child(3) b").textContent=profile.alerts.enabled?"ON":"OFF";
   });
   dashboard.querySelector("#save-profile").addEventListener("click",()=>{
-   profile.name=dashboard.querySelector("#profile-name").value.trim()||profile.name;saveProfile(profile);
-   dashboard.querySelector("#profile-feedback").textContent="Profile preview updated.";dashboard.querySelector(".dash-welcome").textContent="Welcome, "+profile.name;
+   ["firstName","lastName","fatherName","phone","country","province","region","city","address","religion"].forEach(key=>{
+    const field=dashboard.querySelector("#profile-"+key);if(field)profile[key]=field.value.trim();
+   });
+   profile.name=[profile.firstName,profile.lastName].filter(Boolean).join(" ")||profile.name;
+   saveProfile(profile);
+   dashboard.querySelector("#profile-feedback").textContent="Profile preview updated on this device.";
+   dashboard.querySelector(".dash-welcome").textContent="Welcome, "+(profile.firstName||profile.name);
   });
  }
  signup.addEventListener("submit",event=>{
   event.preventDefault();const data=new FormData(signup),roles=data.getAll("roles");
   if(!roles.length){feedback.textContent="Please select at least one account type.";return}
-  const profile={name:String(data.get("name")).trim(),email:String(data.get("email")).trim().toLowerCase(),roles,alerts:{enabled:false,email:String(data.get("email")).trim().toLowerCase(),categories:[0,1,2,3,4],daysBefore:2},saved:[]};
+  const firstName=String(data.get("firstName")).trim(),lastName=String(data.get("lastName")).trim(),email=String(data.get("email")).trim().toLowerCase();
+  const profile={firstName,lastName,name:[firstName,lastName].filter(Boolean).join(" "),fatherName:String(data.get("fatherName")).trim(),email,phone:String(data.get("phone")).trim(),country:String(data.get("country")).trim(),province:String(data.get("province")).trim(),region:String(data.get("region")).trim(),city:String(data.get("city")).trim(),address:String(data.get("address")).trim(),religion:String(data.get("religion")).trim(),roles,alerts:{enabled:false,email,categories:[0,1,2,3,4],daysBefore:2},saved:[]};
   saveProfile(profile);showDashboard(profile);
  });
  signin.addEventListener("submit",event=>{
