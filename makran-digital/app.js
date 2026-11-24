@@ -83,15 +83,16 @@ const menu=document.querySelector("#menu-button");menu.addEventListener("click",
 document.querySelector("#year").textContent=new Date().getFullYear();render();loadLivePosts();
 
 
-/* Makran Digital multi-role account preview.
-   This is deliberately NOT authentication: no passwords or secrets are stored.
-   Replace with Supabase Auth + RLS before accepting real user accounts. */
+
+/* Personal dashboard preview and deadline-alert preferences.
+   Email delivery requires authenticated backend, scheduled worker and email provider. */
 (()=>{
  const signup=document.querySelector("#demo-signup"),signin=document.querySelector("#demo-signin");
  const feedback=document.querySelector("#account-feedback"),dashboard=document.querySelector("#demo-dashboard");
  const tabs=[...document.querySelectorAll(".account-tab")];
  const profileKey="makranDigitalPreviewProfile";
  const readProfile=()=>{try{return JSON.parse(localStorage.getItem(profileKey)||"null")}catch{return null}};
+ const saveProfile=p=>localStorage.setItem(profileKey,JSON.stringify(p));
  function showTab(tab){
   tabs.forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
   signup.hidden=tab!=="signup";signin.hidden=tab!=="signin";dashboard.hidden=true;
@@ -100,15 +101,37 @@ document.querySelector("#year").textContent=new Date().getFullYear();render();lo
  function showDashboard(profile){
   signup.hidden=true;signin.hidden=true;dashboard.hidden=false;
   tabs.forEach(b=>b.classList.remove("active"));
-  dashboard.innerHTML='<div class="dashboard-top"><span class="eyebrow dark-eyebrow">PROFILE PREVIEW</span><button type="button" id="preview-signout">Sign out</button></div><h3>Welcome, '+escapeHtml(profile.name)+'</h3><p>'+escapeHtml(profile.email)+'</p><div class="dashboard-roles">'+profile.roles.map(r=>'<span>'+escapeHtml(r)+'</span>').join("")+'</div><p class="dashboard-message">Your profile is currently stored only in this browser. Real account security, profile editing and personalized recommendations will be added with the backend.</p>';
-  document.querySelector("#preview-signout").addEventListener("click",()=>{showTab("signup")});
+  const categories=["Scholarships","Jobs & internships","Skills & training","Admissions & tests","Community opportunities"];
+  dashboard.innerHTML=`
+   <div class="dashboard-top"><div><span class="eyebrow dark-eyebrow">YOUR PERSONAL SPACE</span><h3 class="dash-welcome">Welcome, ${escapeHtml(profile.name)}</h3></div><button type="button" id="preview-signout">Sign out</button></div>
+   <p class="dash-email">${escapeHtml(profile.email)}</p>
+   <div class="dashboard-nav"><button class="dash-nav active" data-view="overview">Overview</button><button class="dash-nav" data-view="saved">Saved opportunities</button><button class="dash-nav" data-view="alerts">Deadline alerts</button><button class="dash-nav" data-view="profile">My profile</button></div>
+   <section class="dash-view" data-panel="overview"><div class="dash-stats"><div><b>${profile.roles.length}</b><span>Account types</span></div><div><b>${profile.saved?.length||0}</b><span>Saved items</span></div><div><b>${profile.alerts?.enabled?"ON":"OFF"}</b><span>Email alerts</span></div></div><h4>Your account types</h4><div class="dashboard-roles">${profile.roles.map(r=>'<span>'+escapeHtml(r)+'</span>').join("")}</div><p class="dashboard-message">Your dashboard is your personal starting point. Save opportunities from the directory and manage deadline reminders here.</p></section>
+   <section class="dash-view" data-panel="saved" hidden><h4>Saved opportunities</h4><p class="dash-muted">Your saved listings will appear here. Saving live listings will be enabled with the connected account database.</p><div class="saved-preview">${(profile.saved||[]).length?profile.saved.map(x=>'<div>'+escapeHtml(x)+'</div>').join(""):'No opportunities saved yet.'}</div></section>
+   <section class="dash-view" data-panel="alerts" hidden><h4>Deadline email reminders</h4><p class="dash-muted">Choose the updates you want. The planned reminder is sent 2 days (48 hours) before an opportunity deadline.</p><label class="alert-toggle"><input type="checkbox" id="alerts-enabled" ${profile.alerts?.enabled?"checked":""}><span><b>Enable email reminders</b><small>Receive deadline alerts at your account email.</small></span></label><label class="dash-field">Notification email<input id="alerts-email" type="email" value="${escapeHtml(profile.alerts?.email||profile.email)}" placeholder="you@example.com"></label><div class="alert-categories"><b>Notify me about</b>${categories.map((c,i)=>'<label><input type="checkbox" class="alert-category" value="'+i+'" '+((profile.alerts?.categories||[0,1,2,3,4]).includes(i)?"checked":"")+'>'+c+'</label>').join("")}</div><div class="alert-timing"><span>Reminder timing</span><b>2 days before deadline</b></div><button type="button" class="button button-dark" id="save-alerts">Save notification preferences</button><p class="form-feedback" id="alert-feedback" role="status">Preview only: preferences are saved in this browser. Automatic email delivery will start after backend and email-service setup.</p></section>
+   <section class="dash-view" data-panel="profile" hidden><h4>Personal profile</h4><label class="dash-field">Full name<input id="profile-name" value="${escapeHtml(profile.name)}" maxlength="100"></label><label class="dash-field">Email address<input value="${escapeHtml(profile.email)}" disabled></label><div class="dashboard-roles">${profile.roles.map(r=>'<span>'+escapeHtml(r)+'</span>').join("")}</div><p class="dash-muted">You can select multiple account types. Profile editing and role updates will be connected to secure accounts later.</p><button type="button" class="button button-dark" id="save-profile">Save profile preview</button><p class="form-feedback" id="profile-feedback" role="status"></p></section>`;
+  dashboard.querySelectorAll(".dash-nav").forEach(btn=>btn.addEventListener("click",()=>{
+   dashboard.querySelectorAll(".dash-nav").forEach(x=>x.classList.toggle("active",x===btn));
+   dashboard.querySelectorAll(".dash-view").forEach(x=>x.hidden=x.dataset.panel!==btn.dataset.view);
+  }));
+  dashboard.querySelector("#preview-signout").addEventListener("click",()=>showTab("signup"));
+  dashboard.querySelector("#save-alerts").addEventListener("click",()=>{
+   const email=dashboard.querySelector("#alerts-email").value.trim();
+   if(dashboard.querySelector("#alerts-enabled").checked&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){dashboard.querySelector("#alert-feedback").textContent="Enter a valid email address.";return}
+   profile.alerts={enabled:dashboard.querySelector("#alerts-enabled").checked,email,categories:[...dashboard.querySelectorAll(".alert-category:checked")].map(x=>Number(x.value)),daysBefore:2};
+   saveProfile(profile);dashboard.querySelector("#alert-feedback").textContent="Preferences saved in this browser. Real email alerts will activate after backend integration.";
+   dashboard.querySelector(".dash-stats div:nth-child(3) b").textContent=profile.alerts.enabled?"ON":"OFF";
+  });
+  dashboard.querySelector("#save-profile").addEventListener("click",()=>{
+   profile.name=dashboard.querySelector("#profile-name").value.trim()||profile.name;saveProfile(profile);
+   dashboard.querySelector("#profile-feedback").textContent="Profile preview updated.";dashboard.querySelector(".dash-welcome").textContent="Welcome, "+profile.name;
+  });
  }
  signup.addEventListener("submit",event=>{
-  event.preventDefault();
-  const data=new FormData(signup),roles=data.getAll("roles");
+  event.preventDefault();const data=new FormData(signup),roles=data.getAll("roles");
   if(!roles.length){feedback.textContent="Please select at least one account type.";return}
-  const profile={name:String(data.get("name")).trim(),email:String(data.get("email")).trim().toLowerCase(),roles};
-  localStorage.setItem(profileKey,JSON.stringify(profile));showDashboard(profile);
+  const profile={name:String(data.get("name")).trim(),email:String(data.get("email")).trim().toLowerCase(),roles,alerts:{enabled:false,email:String(data.get("email")).trim().toLowerCase(),categories:[0,1,2,3,4],daysBefore:2},saved:[]};
+  saveProfile(profile);showDashboard(profile);
  });
  signin.addEventListener("submit",event=>{
   event.preventDefault();const email=String(new FormData(signin).get("email")).trim().toLowerCase(),profile=readProfile();
