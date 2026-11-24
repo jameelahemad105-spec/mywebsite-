@@ -29,7 +29,7 @@
   <header class="site-header">
     <a class="brand" href="#home" aria-label="Makran Digital home"><span class="brand-mark">M</span><span>MAKRAN <b>DIGITAL</b><small>CONNECTING PEOPLE. OPENING OPPORTUNITIES.</small></span></a>
     <button class="menu-button" id="menu-button" aria-label="Open navigation" aria-expanded="false">☰</button>
-    <nav id="nav"><a href="#explore">Explore opportunities</a><a href="#test-centre">Test preparation</a><a href="#career-guidance">Career guidance</a><a href="#jobs-portal">Jobs & internships</a><a href="#documents">Document centre</a><a href="#community">Community</a><a href="#pathways">Who we serve</a><a href="#account">Create account</a><a class="nav-submit" href="#submit">Post an opportunity <span>↗</span></a></nav>
+    <nav id="nav"><a href="#explore">Explore opportunities</a><a href="#test-centre">Test preparation</a><a href="#career-guidance">Career guidance</a><a href="#jobs-portal">Jobs & internships</a><a href="#documents">Document centre</a><a href="#community">Community</a><a href="#security-centre">Security & Privacy</a><a href="#pathways">Who we serve</a><a href="#account">Create account</a><a class="nav-submit" href="#submit">Post an opportunity <span>↗</span></a></nav>
   </header>
 
   <main id="home">
@@ -314,10 +314,21 @@
         <div class="community-discussions"><div class="community-feed-heading"><div><div class="eyebrow dark-eyebrow">LATEST DISCUSSIONS</div><h3>Community feed</h3></div><button type="button" id="community-refresh" class="community-refresh">Refresh feed ↻</button></div><div id="community-feed" aria-live="polite"><p class="community-status">Loading community discussions…</p></div></div>
       </div>
     </section>
+  <section class="section security-centre" id="security-centre">
+    <div class="section-heading"><div><div class="eyebrow dark-eyebrow">YOUR ACCOUNT · YOUR CONTROL</div><h2>Security & <em>Privacy Centre.</em></h2><p>Simple steps to protect your account and understand how your information is handled.</p></div><span class="section-number">10 / SECURITY</span></div>
+    <p class="security-intro">Makran Digital uses Supabase authentication for sign-in. Your private profile and saved application records are protected by database access rules intended to limit access to your own account. Public opportunity listings and community posts may be visible to other visitors or signed-in members as described on the platform.</p>
+    <div class="security-grid">
+      <article class="security-card"><span>01 · ACCOUNT ACCESS</span><h3>Protect your sign-in</h3><ul><li>Use a unique password of at least 8 characters.</li><li>Never share your password, OTP or verification link.</li><li>Sign out on shared or public computers.</li><li>Do not reuse your email password here.</li></ul></article>
+      <article class="security-card"><span>02 · PERSONAL INFORMATION</span><h3>Keep private data private</h3><ul><li>Only provide information needed for your profile.</li><li>Do not post phone numbers, identity documents or private records in Community.</li><li>Check links before opening them and verify opportunities with the official provider.</li></ul></article>
+      <article class="security-card"><span>03 · REPORT A PROBLEM</span><h3>Help keep the platform safe</h3><ul><li>Use “Report post” on suspicious or harmful Community content.</li><li>Do not pay agents who promise guaranteed scholarships or jobs.</li><li>Contact the platform owner if you suspect account misuse.</li></ul><a href="#community">Go to Community ↗</a></article>
+    </div>
+    <div class="security-request"><h3>Request account deletion</h3><p>Submit a request if you want your Makran Digital account and associated data reviewed for deletion. This form records your request only. The platform owner must verify and process it securely; submitting this form does not immediately delete your account.</p><form id="deletion-request-form"><label>Optional reason<textarea name="reason" maxlength="1000" rows="3" placeholder="You can briefly explain why you want your account deleted."></textarea></label><button class="button button-dark" type="submit" disabled>Submit deletion request</button><p id="deletion-request-feedback" role="status" aria-live="polite">Checking your sign-in…</p></form></div>
+  </section>
   <footer><div class="footer-inner"><a class="brand footer-brand" href="#home"><span class="brand-mark">M</span><span>MAKRAN <b>DIGITAL</b><small>CONNECTING PEOPLE. OPENING OPPORTUNITIES.</small></span></a><p>Made for the ambitions of people across Makran and beyond.</p><span>© <span id="year"></span> MAKRAN DIGITAL</span></div><div class="footer-owner"><span>FOUNDER & PROJECT LEAD</span><strong>Jameel Ahemad</strong><small>Student, Bahria Model College Turbat · Independent community opportunity platform</small></div><div class="footer-note">Makran Digital is an independent opportunity information hub, not a scholarship provider or testing authority. Always verify eligibility, acceptance, fees and deadlines on the official provider's website. Never share passwords, OTPs or payment details with unverified agents. Accounts are managed through Supabase authentication. Keep your password and verification codes private.</div></footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./app.js"></script>
   <script src="./auth.js"></script>
   <script src="./community.js"></script>
+  <script src="./security.js"></script>
 </body>
 </html>
