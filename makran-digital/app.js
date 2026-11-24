@@ -95,9 +95,13 @@ function scheduleInstantAnswer(query){
 }
 function render(){
  const raw=searchInput.value.trim(),q=normalizeSearch(raw),cat=categoryFilter.value,terms=q.split(/\s+/).filter(Boolean);
+ const finderLevel=document.querySelector("#finder-level")?.value||"",finderCountry=document.querySelector("#finder-country")?.value||"",finderFunding=document.querySelector("#finder-funding")?.value||"";
  const filtered=posts.filter(p=>{
   if(cat!=="all"&&p.category!==cat)return false;
   const hay=normalizeSearch([p.title,p.description,p.location,p.type,labels[p.category],p.tags||""].join(" "));
+  if(finderLevel&&!hay.includes(normalizeSearch(finderLevel).split(" ")[0])&&!hay.includes(normalizeSearch(finderLevel).split(" ").slice(-1)[0]))return false;
+  if(finderCountry&&!hay.includes(normalizeSearch(finderCountry)))return false;
+  if(finderFunding&&!hay.includes(normalizeSearch(finderFunding).split(" ")[0]))return false;
   return !terms.length||terms.every(term=>hay.includes(term));
  });
  grid.innerHTML=filtered.map(p=>{const url=safeUrl(p.url);return '<article class="op-card"><div class="op-top"><span class="op-category">'+escapeHtml(labels[p.category]||"Student resource")+'</span><span class="op-date">'+escapeHtml(p.type||"RESOURCE")+'</span></div><h3>'+escapeHtml(p.title)+'</h3><p>'+escapeHtml(p.description)+'</p><div class="op-foot"><span>⌖ '+escapeHtml(p.location||"Online")+'</span>'+(url?'<a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Open official source ↗</a>':'<span>Link unavailable</span>')+'</div></article>'}).join("");
@@ -117,6 +121,44 @@ function render(){
  }
  resultCount.textContent=filtered.length+" resource"+(filtered.length===1?"":"s")+" found";
 }
+function applyScholarshipFinder(){
+ const level=document.querySelector("#finder-level").value;
+ const country=document.querySelector("#finder-country").value;
+ const funding=document.querySelector("#finder-funding").value;
+ searchInput.value=[level,country,funding].filter(Boolean).join(" ");
+ categoryFilter.value="all";
+ render();
+ document.querySelector("#explore").scrollIntoView({behavior:"smooth"});
+}
+document.querySelector("#finder-search").addEventListener("click",applyScholarshipFinder);
+document.querySelector("#finder-reset").addEventListener("click",()=>{
+ document.querySelector("#finder-level").value="";
+ document.querySelector("#finder-country").value="";
+ document.querySelector("#finder-funding").value="";
+ searchInput.value="";categoryFilter.value="all";render();
+});
+document.querySelector("#eligibility-form").addEventListener("submit",event=>{
+ event.preventDefault();
+ const data=Object.fromEntries(new FormData(event.currentTarget).entries());
+ const levelTerms={intermediate:["undergraduate","bachelor"],bachelor:["master","postgraduate"],master:["phd","doctoral"]}[data.education]||[];
+ const destination=data.destination.toLowerCase();
+ const candidates=resources.filter(p=>{
+  if(!["scholarships","international"].includes(p.category))return false;
+  const hay=(p.title+" "+p.description+" "+p.location+" "+(p.tags||"")).toLowerCase();
+  if(destination&&!hay.includes(destination))return false;
+  if(levelTerms.length&&!levelTerms.some(term=>hay.includes(term)))return false;
+  if(data.domicile==="balochistan"&&/balochistan|gwadar|kech|turbat|makran|coastal|pakistan/.test(hay))return true;
+  if(data.domicile==="other-pakistan"&&/pakistan|china|commonwealth|hungary|korea|japan|turkiye|turkey/.test(hay))return true;
+  if(data.domicile==="international"&&!/balochistan|gwadar|kech|turbat|makran|beef|pakistan/.test(hay))return true;
+  return false;
+ });
+ const results=document.querySelector("#eligibility-results");
+ const list=candidates.slice(0,8);
+ results.hidden=false;
+ results.innerHTML='<div class="eligibility-result-head"><b>'+list.length+' potential listing'+(list.length===1?'':'s')+' found</b><span>Preliminary matches only</span></div>'+
+ (list.length?'<ul>'+list.map(p=>'<li><a href="'+escapeHtml(safeUrl(p.url))+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(p.title)+' ↗</a><small>'+escapeHtml(p.location||'Online')+' · '+escapeHtml(p.type||'Check official criteria')+'</small></li>').join('')+'</ul>':'<p>No close match was found in the current directory. Try “Any destination” or browse the full scholarship list. New calls may be added as they are announced.</p>')+
+ '<p class="eligibility-disclaimer">This tool only matches directory keywords and broad study stages. It does not verify age, marks, subject, income, nationality rules or current application status. Read the official notice before applying.</p>';
+});
 async function loadLivePosts(){
  if(!SUPABASE_URL.startsWith("https://")||SUPABASE_ANON_KEY.startsWith("YOUR_")){feedStatus.textContent="Curated student directory · live community submissions not connected";return}
  try{const response=await fetch(SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/"+TABLE+"?select=id,category,title,description,location,url,created_at&status=eq.approved&order=created_at.desc",{headers:{apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY}});if(!response.ok)throw new Error("Database request failed");const live=await response.json();posts=[...live.map(p=>({...p,live:true,tags:""})),...resources];feedStatus.textContent="Curated student directory + approved community submissions";render()}catch(error){feedStatus.textContent="Curated student directory · live database connection needs checking";console.warn(error)}
