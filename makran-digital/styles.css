@@ -45,3 +45,22 @@
 .footer-owner strong{font-size:16px}
 .footer-owner small{font-size:11px}
 @media(max-width:620px){.account-panel{padding:18px}.account-tabs{display:grid;grid-template-columns:1fr 1fr}.account-tab{padding:12px 8px}.role-option{padding:13px}.footer-owner{align-items:flex-start;flex-direction:column;gap:6px}}
+
+/* Full-site sign-in gate: public content is hidden until Supabase confirms a session */
+body.auth-locked> :not(#access-gate){visibility:hidden!important;pointer-events:none!important}
+#access-gate{position:fixed;inset:0;z-index:99999;overflow-y:auto;background:linear-gradient(135deg,#102b35 0%,#173b45 58%,#0b222a 100%);padding:28px 18px;display:flex;justify-content:center;align-items:center}
+#access-gate[hidden]{display:none!important}
+.access-gate-inner{width:min(100%,680px);margin:auto}
+.access-brand{display:flex;align-items:center;gap:12px;color:#fff;font:800 14px Manrope;letter-spacing:.09em;margin:0 auto 30px;width:fit-content}
+.access-brand .brand-mark{width:46px;height:46px;background:#d8bc83;color:#102b35}
+.access-brand small{display:block;color:#c4d2ce;font:600 8px "DM Sans";letter-spacing:.13em;margin-top:4px}
+.access-welcome{text-align:center;color:#fff;margin:0 auto 22px;max-width:560px}
+.access-welcome .eyebrow{justify-content:center}
+.access-welcome h1{font:800 clamp(30px,5vw,48px)/1.12 Manrope;letter-spacing:-.05em;margin:16px 0 10px}
+.access-welcome h1 em{font:500 1em Georgia;color:#d8bc83}
+.access-welcome p{font-size:13px;line-height:1.7;color:#c6d4d0;margin:0 auto;max-width:500px}
+.access-security{text-align:center;color:#d8d4c4;font-size:10px;margin-top:14px}
+.access-security span{color:#d8bc83;font-weight:800;margin-right:6px}
+#access-gate .account-panel{max-width:620px;margin:0 auto;background:#fff;border:1px solid #e5dfd1;box-shadow:0 20px 65px #06171b66}
+.access-footnote{text-align:center;color:#9fb2ad;font-size:10px;margin:15px 0 0}
+@media(max-width:620px){#access-gate{padding:20px 12px;align-items:flex-start}.access-brand{margin-bottom:22px}.access-welcome{margin-bottom:17px}.access-welcome p{font-size:12px}#access-gate .account-panel{padding:17px}}
