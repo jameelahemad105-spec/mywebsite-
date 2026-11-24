@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b35">
+  <meta name="description" content="Makran Digital connects people across Makran with education, scholarships, jobs, local services and community opportunities.">
+  <title>Makran Digital — Opportunities for Everyone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="topline">A community platform for Turbat, Gwadar, Panjgur and the wider Makran region</div>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Makran Digital home"><span class="brand-mark">M</span><span>MAKRAN <b>DIGITAL</b><small>CONNECTING PEOPLE. CREATING OPPORTUNITIES.</small></span></a>
+    <button class="menu-button" id="menu-button" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav id="nav"><a href="#explore">Explore</a><a href="#how">How it works</a><a href="#community">Community</a><a class="nav-submit" href="#submit">Share an opportunity <span>↗</span></a></nav>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow"><span></span> THE DIGITAL GATEWAY TO MAKRAN</div>
+        <h1>Good opportunities<br>should reach <em>everyone.</em></h1>
+        <p class="hero-copy">Find scholarships, discover work, explore local services and stay connected with what's happening across our community.</p>
+        <div class="hero-actions"><a class="button button-gold" href="#explore">Explore opportunities <span>↓</span></a><a class="button button-outline" href="#submit">Share something useful <span>↗</span></a></div>
+        <div class="hero-trust"><span>✳</span> Built for the people of Makran. Open to everyone.</div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="ridge ridge-back"></div><div class="ridge ridge-front"></div><div class="art-label">MAKRAN<br><b>ONE COMMUNITY</b></div><div class="art-orbit"></div></div>
+    </section>
+
+    <section class="quick-stats" aria-label="Platform categories">
+      <a href="#explore" data-shortcut="education"><span class="stat-icon">▤</span><span><b>Education</b><small>Study & scholarships</small></span><i>↗</i></a>
+      <a href="#explore" data-shortcut="jobs"><span class="stat-icon">↗</span><span><b>Jobs & careers</b><small>Work & internships</small></span><i>↗</i></a>
+      <a href="#explore" data-shortcut="services"><span class="stat-icon">⌂</span><span><b>Local services</b><small>Find help nearby</small></span><i>↗</i></a>
+      <a href="#explore" data-shortcut="community"><span class="stat-icon">◎</span><span><b>Community</b><small>News & announcements</small></span><i>↗</i></a>
+    </section>
+
+    <section class="section explore-section" id="explore">
+      <div class="section-heading"><div><div class="eyebrow dark-eyebrow">DISCOVER WHAT'S OUT THERE</div><h2>Explore <em>opportunities.</em></h2><p>Useful information, brought together in one place.</p></div><span class="section-number">01 / DISCOVER</span></div>
+      <div class="search-panel"><label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search scholarships, jobs, services..." aria-label="Search opportunities"></label><label class="filter-select"><span class="sr-only">Filter by category</span><select id="category-filter"><option value="all">All categories</option><option value="education">Education</option><option value="jobs">Jobs & careers</option><option value="services">Local services</option><option value="community">Community</option></select></label></div>
+      <div class="feed-meta"><span id="feed-status">Showing community resources</span><span id="result-count"></span></div>
+      <div class="opportunity-grid" id="opportunity-grid" aria-live="polite"></div>
+      <div class="empty-state" id="empty-state" hidden>No matching posts yet. Try another search or share the first useful opportunity.</div>
+    </section>
+
+    <section class="how-section" id="how"><div class="section-wrap"><div class="section-heading light-heading"><div><div class="eyebrow"><span></span> SIMPLE BY DESIGN</div><h2>A useful platform<br>is built <em>together.</em></h2></div><span class="section-number">02 / HOW IT WORKS</span></div><div class="steps"><article><span>01</span><div class="step-icon">⌕</div><h3>Discover</h3><p>Browse opportunities and community information in one organized place.</p></article><article><span>02</span><div class="step-icon">＋</div><h3>Contribute</h3><p>Share a useful opening, scholarship, service or public announcement.</p></article><article><span>03</span><div class="step-icon">✓</div><h3>Help the community</h3><p>After review, useful and accurate submissions become visible to everyone.</p></article></div></div></section>
+
+    <section class="submit-section" id="submit"><div class="section-wrap submit-layout"><div class="submit-copy"><div class="eyebrow dark-eyebrow">MAKE A CONTRIBUTION</div><h2>Know something<br>that could help? <em>Share it.</em></h2><p>Help someone discover an opportunity. Submissions are reviewed before appearing publicly so the platform can remain useful and trustworthy.</p><div class="review-note"><span>✓</span><p><b>Community-first moderation</b><small>Submissions are not published automatically. The team reviews them first.</small></p></div></div>
+      <form class="submit-form" id="submit-form"><div class="form-title"><span>COMMUNITY SUBMISSION</span><b>Share an opportunity <i>↗</i></b></div>
+        <label>Your name<input name="submitter_name" required maxlength="80" placeholder="e.g. Ali Ahmed"></label>
+        <label>What are you sharing?<select name="category" required><option value="">Choose a category</option><option value="education">Education / Scholarship</option><option value="jobs">Job / Internship</option><option value="services">Local service / Business</option><option value="community">Community announcement</option></select></label>
+        <label>Title<input name="title" required maxlength="120" placeholder="A clear title for your post"></label>
+        <label>Details<textarea name="description" required maxlength="1200" rows="4" placeholder="Explain the opportunity, who it is for, and important dates..."></textarea></label>
+        <label>Link (optional)<input name="url" type="url" placeholder="https://example.com"></label>
+        <label>Area<input name="location" maxlength="100" placeholder="e.g. Turbat, Gwadar, Panjgur"></label>
+        <button class="button button-dark" type="submit" id="submit-button">Send for review <span>↗</span></button>
+        <p class="form-feedback" id="form-feedback" role="status">Submissions are reviewed before publication.</p>
+      </form></div></section>
+
+    <section class="community-section" id="community"><div class="section-wrap community-inner"><div><div class="eyebrow"><span></span> ONE REGION. MANY POSSIBILITIES.</div><h2>When information moves,<br><em>communities move forward.</em></h2></div><p>Makran Digital is being built as a shared resource for students, job seekers, families, local businesses and community organizations. Start with one useful contribution.</p><a class="button button-gold" href="#submit">Contribute to Makran Digital <span>↗</span></a></div></section>
+  </main>
+
+  <footer><div class="footer-inner"><a class="brand footer-brand" href="#home"><span class="brand-mark">M</span><span>MAKRAN <b>DIGITAL</b><small>CONNECTING PEOPLE. CREATING OPPORTUNITIES.</small></span></a><p>Built with care for the people of Makran.</p><span>© <span id="year"></span> MAKRAN DIGITAL</span></div><div class="footer-note">Information is shared for community awareness. Always verify deadlines, eligibility, contact details and official requirements with the original source.</div></footer>
+</body>
+</html>
