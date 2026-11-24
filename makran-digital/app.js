@@ -37,11 +37,34 @@ const grid=document.querySelector("#opportunity-grid"),searchInput=document.quer
 let posts=[...resources];
 function safeUrl(value){try{const u=new URL(value);return ["https:","http:"].includes(u.protocol)?u.href:""}catch{return ""}}
 function escapeHtml(value=""){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+const searchAliases={
+ "usa test":"usat","usat e":"usat","usat-e":"usat",
+ "undergraduate studies admission test":"usat","education testing council":"usat",
+ "fully funded scholarship":"fully funded","study abroad scholarship":"study abroad",
+ "balochistan scholarship":"balochistan","jobs in pakistan":"jobs"
+};
+function normalizeSearch(value){
+ let q=String(value||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+ for(const [phrase,replacement] of Object.entries(searchAliases)){
+  if(q===phrase||q.includes(phrase)) q=q.replace(phrase,replacement);
+ }
+ return q.replace(/\\s+/g," ").trim();
+}
 function render(){
- const q=searchInput.value.trim().toLowerCase(),cat=categoryFilter.value,terms=q.split(/\s+/).filter(Boolean);
- const filtered=posts.filter(p=>{if(cat!=="all"&&p.category!==cat)return false;const hay=[p.title,p.description,p.location,p.type,labels[p.category],p.tags||""].join(" ").toLowerCase();return !terms.length||terms.every(term=>hay.includes(term))});
+ const raw=searchInput.value.trim(),q=normalizeSearch(raw),cat=categoryFilter.value,terms=q.split(/\\s+/).filter(Boolean);
+ const filtered=posts.filter(p=>{
+  if(cat!=="all"&&p.category!==cat)return false;
+  const hay=normalizeSearch([p.title,p.description,p.location,p.type,labels[p.category],p.tags||""].join(" "));
+  return !terms.length||terms.every(term=>hay.includes(term));
+ });
  grid.innerHTML=filtered.map(p=>{const url=safeUrl(p.url);return '<article class="op-card"><div class="op-top"><span class="op-category">'+escapeHtml(labels[p.category]||"Student resource")+'</span><span class="op-date">'+escapeHtml(p.type||"RESOURCE")+'</span></div><h3>'+escapeHtml(p.title)+'</h3><p>'+escapeHtml(p.description)+'</p><div class="op-foot"><span>⌖ '+escapeHtml(p.location||"Online")+'</span>'+(url?'<a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Open official source ↗</a>':'<span>Link unavailable</span>')+'</div></article>'}).join("");
- document.querySelector("#empty-state").hidden=filtered.length>0;resultCount.textContent=filtered.length+" resource"+(filtered.length===1?"":"s")+" found";
+ const empty=document.querySelector("#empty-state");
+ empty.hidden=filtered.length>0;
+ if(!filtered.length&&raw){
+  const webUrl="https://www.google.com/search?q="+encodeURIComponent(raw+" scholarship students Pakistan official");
+  empty.innerHTML='<b>No exact match in our verified directory yet.</b><br>We do not want to show you made-up opportunities. Try another keyword, clear the category filter, or search the wider web for this topic.<br><a class="text-link" style="color:#8a6b35" href="'+webUrl+'" target="_blank" rel="noopener noreferrer">Search the web for “'+escapeHtml(raw)+'” ↗</a>';
+ }
+ resultCount.textContent=filtered.length+" resource"+(filtered.length===1?"":"s")+" found";
 }
 async function loadLivePosts(){
  if(!SUPABASE_URL.startsWith("https://")||SUPABASE_ANON_KEY.startsWith("YOUR_")){feedStatus.textContent="Curated student directory · live community submissions not connected";return}
@@ -53,7 +76,7 @@ document.querySelector("#submit-form").addEventListener("submit",async event=>{
  const data=Object.fromEntries(new FormData(form).entries());data.url=safeUrl(data.url)||null;data.status="pending";button.disabled=true;button.textContent="Sending...";
  try{const response=await fetch(SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/"+TABLE,{method:"POST",headers:{apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(data)});if(!response.ok)throw new Error("Submission was not accepted");form.reset();feedback.textContent="Thank you! Your student resource has been received and is waiting for review."}catch(error){feedback.textContent="We couldn't send this submission. Please check the database setup and try again."}finally{button.disabled=false;button.innerHTML='Send for review <span>↗</span>'}
 });
-searchInput.addEventListener("input",render);categoryFilter.addEventListener("change",render);
+searchInput.addEventListener("input",()=>{if(searchInput.value.trim())categoryFilter.value="all";render()});categoryFilter.addEventListener("change",render);
 document.querySelectorAll("[data-shortcut]").forEach(a=>a.addEventListener("click",()=>{categoryFilter.value=a.dataset.shortcut;render()}));
 document.querySelectorAll("[data-search]").forEach(el=>el.addEventListener("click",event=>{event.preventDefault();searchInput.value=el.dataset.search;categoryFilter.value="all";render();document.querySelector("#explore").scrollIntoView({behavior:"smooth"})}));
 const menu=document.querySelector("#menu-button");menu.addEventListener("click",()=>{const nav=document.querySelector("#nav"),open=nav.classList.toggle("open");menu.setAttribute("aria-expanded",String(open));menu.textContent=open?"×":"☰"});
