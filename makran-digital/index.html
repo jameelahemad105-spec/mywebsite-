@@ -58,6 +58,26 @@
         <label class="filter-select"><span class="sr-only">Filter by category</span><select id="category-filter"><option value="all">All opportunities</option><option value="tests">Tests & admissions</option><option value="scholarships">Scholarships</option><option value="international">Study abroad</option><option value="careers">Jobs & internships</option><option value="skills">Skills & preparation</option></select></label>
       </div>
       <div class="search-hints"><span>Popular searches:</span><button type="button" data-search="USAT">USAT</button><button type="button" data-search="USA test">USA test</button><button type="button" data-search="USAT-E">USAT-E</button><button type="button" data-search="fully funded">Fully funded</button><button type="button" data-search="Balochistan scholarship">Balochistan scholarships</button><button type="button" data-search="IELTS">IELTS</button><button type="button" data-search="internship">Internships</button></div>
+      <section class="finder-panel" aria-labelledby="finder-title">
+        <div class="finder-heading"><div><div class="eyebrow dark-eyebrow">SMART SCHOLARSHIP TOOLS</div><h3 id="finder-title">Find scholarships that fit <em>your next step.</em></h3><p>Filter the directory by study level, destination and funding type.</p></div><span class="finder-mark">01 / MATCH</span></div>
+        <div class="finder-controls">
+          <label>Study level<select id="finder-level"><option value="">Any level</option><option value="undergraduate bachelor">Bachelor's / Undergraduate</option><option value="master">Master's</option><option value="phd">PhD / Doctoral</option></select></label>
+          <label>Destination<select id="finder-country"><option value="">Any destination</option><option value="Pakistan Balochistan">Pakistan</option><option value="China">China</option><option value="Hungary">Hungary</option><option value="South Korea">South Korea</option><option value="Japan">Japan</option><option value="United Kingdom">United Kingdom</option><option value="Europe">Europe</option><option value="Germany">Germany</option><option value="Türkiye">Türkiye</option></select></label>
+          <label>Funding<select id="finder-funding"><option value="">Any funding</option><option value="fully funded">Fully funded</option><option value="need based">Need-based</option><option value="merit">Merit-based</option></select></label>
+          <button class="button button-dark" type="button" id="finder-search">Find scholarships ↗</button>
+          <button class="finder-reset" type="button" id="finder-reset">Clear filters</button>
+        </div>
+        <div class="eligibility-box">
+          <div><div class="eyebrow dark-eyebrow">QUICK ELIGIBILITY CHECK</div><h3>Could this opportunity suit you?</h3><p>Answer a few questions to see relevant listings. This is an early matching guide, not an official eligibility decision.</p></div>
+          <form id="eligibility-form" class="eligibility-controls">
+            <label>Current education<select name="education" required><option value="">Select your current level</option><option value="intermediate">Matric / Intermediate student or graduate</option><option value="bachelor">Bachelor's student or graduate</option><option value="master">Master's student or graduate</option></select></label>
+            <label>Where do you hold domicile?<select name="domicile" required><option value="">Select domicile</option><option value="balochistan">Balochistan</option><option value="other-pakistan">Other Pakistan province</option><option value="international">Outside Pakistan</option></select></label>
+            <label>Study destination<select name="destination"><option value="">Any destination</option><option value="Pakistan">Pakistan</option><option value="China">China</option><option value="Hungary">Hungary</option><option value="South Korea">South Korea</option><option value="Japan">Japan</option><option value="United Kingdom">United Kingdom</option><option value="Europe">Europe</option><option value="Germany">Germany</option><option value="Türkiye">Türkiye</option></select></label>
+            <button class="button button-gold" type="submit">Check my matches ↗</button>
+          </form>
+          <div id="eligibility-results" class="eligibility-results" aria-live="polite" hidden></div>
+        </div>
+      </section>
       <div class="feed-meta"><span id="feed-status">Opportunity directory · curated links</span><span id="result-count"></span></div>
       <div class="opportunity-grid" id="opportunity-grid" aria-live="polite"></div>
       <div class="empty-state" id="empty-state" hidden><b>No matching resource found in our directory yet.</b><br>Try a different keyword or suggest the resource using the form below. You can also use the official links listed in related categories.</div>
