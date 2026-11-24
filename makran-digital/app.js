@@ -1,4 +1,4 @@
-/* Makran Digital verified directory with free external web-search links. */
+/* Makran Digital verified directory, free public search links and optional topic summaries. */
 const SUPABASE_URL="https://gamndpogjznmdccgmanr.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_I9gufeecgDjFz4ybGxLT_g_qG7SphB1";
 const TABLE="opportunities";
@@ -59,6 +59,35 @@ function normalizeSearch(value){
  }
  return q.replace(/\s+/g," ").trim();
 }
+let instantTimer=null,instantRequest=0;
+function scheduleInstantAnswer(query){
+ clearTimeout(instantTimer);
+ const request=++instantRequest;
+ const target=document.querySelector("#instant-answer");
+ if(target)target.innerHTML='<small>Checking for a free topic summary…</small>';
+ instantTimer=setTimeout(async()=>{
+  try{
+   const params=new URLSearchParams({q:query,format:"json",no_html:"1",skip_disambig:"1"});
+   const response=await fetch("https://api.duckduckgo.com/?"+params.toString());
+   if(!response.ok)throw new Error("Instant answer unavailable");
+   const data=await response.json();
+   if(request!==instantRequest)return;
+   const box=document.querySelector("#instant-answer");
+   if(!box)return;
+   const summary=data.AbstractText||data.Answer||data.Definition||"";
+   const source=data.AbstractURL||data.DefinitionURL||"";
+   if(summary){
+    box.innerHTML='<div class="instant-answer-label">FREE TOPIC SUMMARY · DUCKDUCKGO</div><p></p>'+(source?'<a target="_blank" rel="noopener noreferrer">Read source ↗</a>':"");
+    box.querySelector("p").textContent=summary;
+    const link=box.querySelector("a");if(link)link.href=safeUrl(source);
+   }else{
+    box.innerHTML='<small>No instant summary was available for this keyword. Use the web search links above for full results.</small>';
+   }
+  }catch(error){
+   if(request===instantRequest){const box=document.querySelector("#instant-answer");if(box)box.innerHTML='<small>Topic summary is temporarily unavailable. The free external search links above are still available.</small>'}
+  }
+ },650);
+}
 function render(){
  const raw=searchInput.value.trim(),q=normalizeSearch(raw),cat=categoryFilter.value,terms=q.split(/\s+/).filter(Boolean);
  const filtered=posts.filter(p=>{
@@ -76,7 +105,8 @@ function render(){
   const duck="https://duckduckgo.com/?q="+encodeURIComponent(query);
   const bing="https://www.bing.com/search?q="+encodeURIComponent(query);
   const social="https://www.google.com/search?q="+encodeURIComponent(socialQuery);
-  empty.innerHTML='<b>'+(filtered.length?'Want more information about “'+escapeHtml(raw)+'”?':'No exact match in our verified directory yet.')+'</b><br>Search the wider public internet for current announcements, test details, eligibility, preparation and deadlines. These searches open external search engines; results are not automatically verified by Makran Digital.<div class="web-search-links"><a class="text-link" style="color:#8a6b35" href="'+google+'" target="_blank" rel="noopener noreferrer">Google ↗</a><a class="text-link" style="color:#8a6b35" href="'+duck+'" target="_blank" rel="noopener noreferrer">DuckDuckGo ↗</a><a class="text-link" style="color:#8a6b35" href="'+bing+'" target="_blank" rel="noopener noreferrer">Bing ↗</a><a class="text-link" style="color:#8a6b35" href="'+social+'" target="_blank" rel="noopener noreferrer">Public social-media announcements ↗</a></div>';
+  empty.innerHTML='<b>'+(filtered.length?'Explore more about “'+escapeHtml(raw)+'”':'No exact match in our verified directory yet.')+'</b><br>Use these free public search engines to discover current test notices, eligibility, preparation, deadlines and announcements. External results are not verified by Makran Digital.<div class="web-search-links"><a class="text-link" style="color:#8a6b35" href="'+google+'" target="_blank" rel="noopener noreferrer">Google ↗</a><a class="text-link" style="color:#8a6b35" href="'+duck+'" target="_blank" rel="noopener noreferrer">DuckDuckGo ↗</a><a class="text-link" style="color:#8a6b35" href="'+bing+'" target="_blank" rel="noopener noreferrer">Bing ↗</a><a class="text-link" style="color:#8a6b35" href="'+social+'" target="_blank" rel="noopener noreferrer">Public social-media posts ↗</a></div><div id="instant-answer" class="instant-answer" aria-live="polite"></div>';
+  scheduleInstantAnswer(raw);
  } else {
   empty.innerHTML='<b>Search the verified directory or explore the wider internet.</b>';
  }
