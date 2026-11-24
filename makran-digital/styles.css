@@ -101,3 +101,11 @@ body.auth-locked> :not(#access-gate){visibility:hidden!important;pointer-events:
 .eligibility-results>p{font-size:11px;line-height:1.6;color:#687770}
 .eligibility-results .eligibility-disclaimer{padding-top:12px;border-top:1px solid #e7e4da;color:#8b7650}
 @media(max-width:700px){.finder-controls,.eligibility-controls{grid-template-columns:1fr}.finder-controls .button,.eligibility-controls .button{grid-column:1}.finder-heading{display:block}.finder-mark{display:block;margin-top:12px}.eligibility-box{padding:16px}}
+
+
+/* Expandable scholarship eligibility and requirement details */
+.scholarship-requirements{margin:15px 0 13px;padding:12px 13px;background:#f8f7f2;border:1px solid #e8e4d9;border-radius:5px}
+.scholarship-requirements summary{font-size:11px;font-weight:800;color:#80683d;cursor:pointer;list-style-position:inside}
+.scholarship-requirements ul{padding-left:18px;margin:12px 0 8px}
+.scholarship-requirements li{font-size:11px;line-height:1.65;color:#52645e;margin:6px 0}
+.scholarship-requirements .requirements-note{font-size:10px;line-height:1.6;color:#8b7650;border-top:1px solid #e7e4da;padding-top:9px;margin:9px 0 0}
