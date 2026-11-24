@@ -183,6 +183,11 @@ searchInput.addEventListener("input",()=>{if(searchInput.value.trim())categoryFi
 document.querySelectorAll("[data-shortcut]").forEach(a=>a.addEventListener("click",()=>{categoryFilter.value=a.dataset.shortcut;render()}));
 document.querySelectorAll("[data-search]").forEach(el=>el.addEventListener("click",event=>{event.preventDefault();searchInput.value=el.dataset.search;categoryFilter.value="all";render();document.querySelector("#explore").scrollIntoView({behavior:"smooth"})}));
 const menu=document.querySelector("#menu-button");menu.addEventListener("click",()=>{const nav=document.querySelector("#nav"),open=nav.classList.toggle("open");menu.setAttribute("aria-expanded",String(open));menu.textContent=open?"×":"☰"});
+document.querySelectorAll(".document-checklist").forEach(list=>{
+ const progress=list.parentElement.querySelector(".document-progress");
+ const update=()=>{const boxes=[...list.querySelectorAll('input[type="checkbox"]')];const done=boxes.filter(box=>box.checked).length;if(progress)progress.textContent=done+" of "+boxes.length+" prepared";};
+ list.addEventListener("change",update);update();
+});
 document.querySelector("#year").textContent=new Date().getFullYear();render();loadLivePosts();
 
 
