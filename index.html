@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff8f3">
+  <meta name="description" content="A little birthday experience made for Jameel Ahmad.">
+  <title>Jameel's Birthday — A Little Something Special</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <div id="confetti" class="confetti-layer" aria-hidden="true"></div>
+
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="wordmark" href="#" aria-label="Jameel's birthday home"><span class="wordmark-icon">✳</span> JAMEEL'S DAY</a>
+      <span class="topbar-note">A LITTLE EXPERIENCE, MADE WITH LOVE</span>
+    </header>
+
+    <main>
+      <section class="hero-row" aria-label="Birthday introduction">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> 24 NOVEMBER <span class="eyebrow-dot">•</span> BIRTHDAY EDITION</p>
+          <h1>A little test of <em>how well</em> you know me.</h1>
+          <p class="hero-description">Ten questions, a few heartfelt moments, and one little birthday surprise. Are you ready?</p>
+          <div class="hero-signature"><span class="signature-star">✦</span> A birthday experience for <strong>Jameel Ahmad</strong></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-orbit orbit-one"></div>
+          <div class="art-orbit orbit-two"></div>
+          <span class="art-spark spark-one">✦</span>
+          <span class="art-spark spark-two">✧</span>
+          <span class="art-heart heart-one">♥</span>
+          <span class="art-heart heart-two">♥</span>
+          <div class="cake-plate"></div>
+          <div class="cake-emoji">🎂</div>
+          <div class="art-caption">MAKE A WISH</div>
+        </div>
+      </section>
+
+      <section class="main-card">
+        <div class="card-topline">
+          <span><span class="live-dot"></span> THE BIRTHDAY CHALLENGE</span>
+          <span class="card-topline-right">JUST FOR FUN <span>♡</span></span>
+        </div>
+
+        <section id="welcome-screen" class="screen active" aria-labelledby="welcome-title">
+          <div class="screen-kicker">01 <span>·</span> FIRST THINGS FIRST</div>
+          <h2 id="welcome-title">Who’s joining the celebration?</h2>
+          <p class="section-intro">Before we begin, tell me your full name. This little journey is better when I know who's here.</p>
+          <form id="welcome-form" class="name-form">
+            <label for="visitor-name">YOUR FULL NAME</label>
+            <input id="visitor-name" name="visitorName" type="text" maxlength="60" autocomplete="name" placeholder="e.g. Alex Smith" required>
+            <p class="input-hint">Your name will appear in your birthday result.</p>
+            <button class="button button-primary" type="submit">Let's begin <span>→</span></button>
+          </form>
+        </section>
+
+        <section id="quiz-screen" class="screen" aria-labelledby="quiz-title" hidden>
+          <div class="screen-kicker">02 <span>·</span> THE MEMORY TEST</div>
+          <div class="progress-heading"><span id="quiz-count">QUESTION 1 OF 10</span><span id="quiz-percent">10%</span></div>
+          <div class="progress-track"><div id="quiz-progress" class="progress-fill"></div></div>
+          <h2 id="quiz-title">How well do you know Jameel?</h2>
+          <p id="quiz-question" class="question-text"></p>
+          <div id="quiz-options" class="options-list"></div>
+          <p id="quiz-hint" class="selection-hint" aria-live="polite">Choose one answer to continue.</p>
+          <div class="button-row">
+            <button id="quiz-back" class="button button-quiet" type="button">← Back</button>
+            <button id="quiz-next" class="button button-primary" type="button" disabled>Next question <span>→</span></button>
+          </div>
+        </section>
+
+        <section id="bridge-screen" class="screen" aria-labelledby="bridge-title" hidden>
+          <div class="bridge-icon">✧</div>
+          <div class="screen-kicker centered">THE FIRST PART IS COMPLETE</div>
+          <h2 id="bridge-title" class="centered">You made it through the memories.</h2>
+          <p class="section-intro centered">Now let's leave the score behind for a moment. The next part is about appreciation, kindness, and the little things that matter.</p>
+          <div class="bridge-stats"><strong id="bridge-score">0/10</strong><span>your knowledge score</span></div>
+          <button id="to-care" class="button button-primary centered-button" type="button">Continue to the heart questions <span>→</span></button>
+        </section>
+
+        <section id="care-screen" class="screen" aria-labelledby="care-title" hidden>
+          <div class="screen-kicker">03 <span>·</span> A LITTLE HEART CHECK</div>
+          <div class="progress-heading"><span id="care-count">QUESTION 1 OF 5</span><span id="care-percent">20%</span></div>
+          <div class="progress-track care-track"><div id="care-progress" class="progress-fill"></div></div>
+          <h2 id="care-title">A few words from the heart.</h2>
+          <p id="care-question" class="question-text"></p>
+          <div id="care-options" class="options-list"></div>
+          <div id="care-message-wrap" class="message-wrap" hidden>
+            <label for="birthday-message">YOUR MESSAGE FOR JAMEEL</label>
+            <textarea id="birthday-message" rows="4" maxlength="500" placeholder="Write a birthday wish, a favourite memory, or anything you would like him to know..."></textarea>
+            <p class="input-hint">A few genuine words can mean a lot. This is optional.</p>
+          </div>
+          <p id="care-hint" class="selection-hint" aria-live="polite">Pick the answer that feels most like you.</p>
+          <div class="button-row">
+            <button id="care-back" class="button button-quiet" type="button">← Back</button>
+            <button id="care-next" class="button button-primary" type="button" disabled>Next <span>→</span></button>
+          </div>
+        </section>
+
+        <section id="final-screen" class="screen final-screen" aria-labelledby="final-title" hidden>
+          <div class="final-flower">✿</div>
+          <p class="screen-kicker centered">04 <span>·</span> THE BIRTHDAY FINALE</p>
+          <p id="final-greeting" class="final-greeting">You did it!</p>
+          <h2 id="final-title" class="centered">Thank you for being part of my story.</h2>
+          <p id="final-score-copy" class="section-intro centered"></p>
+          <div class="final-score"><span id="final-score">0/10</span><small>KNOWLEDGE SCORE</small></div>
+          <div class="final-note">
+            <span class="note-heart">♥</span>
+            <p>More than a score, what matters is the kindness, memories, and good energy we share. Thank you for taking a moment to celebrate with me.</p>
+            <strong>— Jameel Ahmad</strong>
+          </div>
+          <div class="final-actions">
+            <button id="copy-results" class="button button-primary" type="button">Copy my answers <span>⧉</span></button>
+            <button id="restart" class="button button-quiet" type="button">Start again ↻</button>
+          </div>
+          <p id="copy-status" class="copy-status" aria-live="polite"></p>
+          <p class="privacy-note">This demo keeps answers in this browser tab only. They are not automatically sent to Jameel.</p>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>MADE FOR A DAY WORTH REMEMBERING</span>
+      <span>WITH A LITTLE EXTRA ♥</span>
+    </footer>
+  </div>
+</body>
+</html>
