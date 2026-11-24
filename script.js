@@ -95,8 +95,38 @@ function renderCare() {
   byId("care-back").style.visibility = state.careIndex === 0 ? "hidden" : "visible";
 }
 
+// Birthday score collection. Add the Supabase project URL and anon key below after setup.
+const BIRTHDAY_SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+const BIRTHDAY_SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+async function saveBirthdayScore() {
+  const status = byId("save-score-status");
+  if (!BIRTHDAY_SUPABASE_URL.startsWith("https://") || BIRTHDAY_SUPABASE_ANON_KEY.startsWith("YOUR_")) {
+    if (status) status.textContent = "Your score is shown here. Online saving will be enabled after the birthday database is connected.";
+    return;
+  }
+  if (status) status.textContent = "Saving your score…";
+  try {
+    const response = await fetch(BIRTHDAY_SUPABASE_URL + "/rest/v1/birthday_results", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": BIRTHDAY_SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + BIRTHDAY_SUPABASE_ANON_KEY,
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify({ visitor_name: state.name, score: quizScore() })
+    });
+    if (!response.ok) throw new Error("Score could not be saved");
+    if (status) status.textContent = "Your score has been saved. Thank you for joining!";
+  } catch (error) {
+    if (status) status.textContent = "Your result is ready, but online saving is temporarily unavailable.";
+  }
+}
+
 function finishExperience() {
   const score = quizScore();
+  saveBirthdayScore();
   let level = "There are more stories for us to share.";
   if (score >= 8) level = "You know me really well — what a memory!";
   else if (score >= 5) level = "You know quite a bit about me!";
