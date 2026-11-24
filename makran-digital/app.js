@@ -81,3 +81,39 @@ document.querySelectorAll("[data-shortcut]").forEach(a=>a.addEventListener("clic
 document.querySelectorAll("[data-search]").forEach(el=>el.addEventListener("click",event=>{event.preventDefault();searchInput.value=el.dataset.search;categoryFilter.value="all";render();document.querySelector("#explore").scrollIntoView({behavior:"smooth"})}));
 const menu=document.querySelector("#menu-button");menu.addEventListener("click",()=>{const nav=document.querySelector("#nav"),open=nav.classList.toggle("open");menu.setAttribute("aria-expanded",String(open));menu.textContent=open?"×":"☰"});
 document.querySelector("#year").textContent=new Date().getFullYear();render();loadLivePosts();
+
+
+/* Makran Digital multi-role account preview.
+   This is deliberately NOT authentication: no passwords or secrets are stored.
+   Replace with Supabase Auth + RLS before accepting real user accounts. */
+(()=>{
+ const signup=document.querySelector("#demo-signup"),signin=document.querySelector("#demo-signin");
+ const feedback=document.querySelector("#account-feedback"),dashboard=document.querySelector("#demo-dashboard");
+ const tabs=[...document.querySelectorAll(".account-tab")];
+ const profileKey="makranDigitalPreviewProfile";
+ const readProfile=()=>{try{return JSON.parse(localStorage.getItem(profileKey)||"null")}catch{return null}};
+ function showTab(tab){
+  tabs.forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+  signup.hidden=tab!=="signup";signin.hidden=tab!=="signin";dashboard.hidden=true;
+ }
+ tabs.forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+ function showDashboard(profile){
+  signup.hidden=true;signin.hidden=true;dashboard.hidden=false;
+  tabs.forEach(b=>b.classList.remove("active"));
+  dashboard.innerHTML='<div class="dashboard-top"><span class="eyebrow dark-eyebrow">PROFILE PREVIEW</span><button type="button" id="preview-signout">Sign out</button></div><h3>Welcome, '+escapeHtml(profile.name)+'</h3><p>'+escapeHtml(profile.email)+'</p><div class="dashboard-roles">'+profile.roles.map(r=>'<span>'+escapeHtml(r)+'</span>').join("")+'</div><p class="dashboard-message">Your profile is currently stored only in this browser. Real account security, profile editing and personalized recommendations will be added with the backend.</p>';
+  document.querySelector("#preview-signout").addEventListener("click",()=>{showTab("signup")});
+ }
+ signup.addEventListener("submit",event=>{
+  event.preventDefault();
+  const data=new FormData(signup),roles=data.getAll("roles");
+  if(!roles.length){feedback.textContent="Please select at least one account type.";return}
+  const profile={name:String(data.get("name")).trim(),email:String(data.get("email")).trim().toLowerCase(),roles};
+  localStorage.setItem(profileKey,JSON.stringify(profile));showDashboard(profile);
+ });
+ signin.addEventListener("submit",event=>{
+  event.preventDefault();const email=String(new FormData(signin).get("email")).trim().toLowerCase(),profile=readProfile();
+  if(!profile||profile.email!==email){signin.querySelector(".form-feedback").textContent="No matching preview profile found in this browser. Create a preview profile first.";return}
+  showDashboard(profile);
+ });
+ const existing=readProfile();if(existing)showDashboard(existing);
+})();
