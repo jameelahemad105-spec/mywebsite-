@@ -12,7 +12,7 @@ const knowledgeQuestions = [
 ];
 
 const careQuestions = [
-  { q: "How much do you care about Jameel?", a: ["A whole lot 💗", "More than I usually say", "I’m always wishing him well", "I’m still getting to know him"] },
+  { q: "How much love and care do you feel for Jameel?", a: ["I love and care about him a lot 💗", "He is very special to me", "I genuinely wish him happiness", "I am still getting to know him"] },
   { q: "What do you appreciate most about him?", a: ["His confidence and courage", "His speeches and ideas", "His ambition and effort", "His friendship and kindness"] },
   { q: "What kind of memories should you make together?", a: ["More laughs and silly moments", "Long talks and honest conversations", "New adventures and experiences", "All of the above ✨"] },
   { q: "When life gets difficult, what would you want Jameel to remember?", a: ["He matters to people", "Someone is cheering him on", "He should keep believing in himself", "All of these ❤️"] },
