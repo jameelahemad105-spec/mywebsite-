@@ -2,6 +2,7 @@
 (()=>{
  const client=window.supabase?.createClient("https://gamndpogjznmdccgmanr.supabase.co","sb_publishable_I9gufeecgDjFz4ybGxLT_g_qG7SphB1");
  const signup=document.querySelector("#demo-signup"),signin=document.querySelector("#demo-signin"),feedback=document.querySelector("#account-feedback"),dashboard=document.querySelector("#demo-dashboard"),tabs=[...document.querySelectorAll(".account-tab")];
+ if(client)window.makranSupabase=client;
  if(!client){feedback.textContent="Secure account service did not load. Refresh and try again.";return}
  const say=(el,msg)=>{if(el)el.textContent=msg};
  function tab(name){tabs.forEach(x=>x.classList.toggle("active",x.dataset.tab===name));signup.hidden=name!=="signup";signin.hidden=name!=="signin";dashboard.hidden=true}
