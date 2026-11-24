@@ -75,3 +75,29 @@ body.auth-locked> :not(#access-gate){visibility:hidden!important;pointer-events:
 .instant-answer a{font-size:11px;color:#8a6b35;font-weight:700}
 .instant-answer small{font-size:11px;line-height:1.6;color:#73817d}
 @media(max-width:620px){.web-search-links{gap:10px 14px}.instant-answer{padding:13px;text-align:left}}
+
+/* Scholarship finder and preliminary eligibility checker */
+.finder-panel{margin:28px 0 34px;padding:clamp(18px,3vw,30px);background:#f4f1e8;border:1px solid #e5dfd0;border-radius:9px}
+.finder-heading{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:20px}
+.finder-heading h3,.eligibility-box h3{font:800 clamp(20px,2.4vw,28px)/1.2 Manrope;letter-spacing:-.04em;margin:8px 0;color:var(--ink)}
+.finder-heading h3 em{font:500 1em Georgia;color:#a17e3e}
+.finder-heading p,.eligibility-box>div>p{font-size:12px;line-height:1.65;color:#697a75;margin:0}
+.finder-mark{font-size:9px;letter-spacing:.14em;font-weight:800;color:#9b855c;white-space:nowrap}
+.finder-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end}
+.finder-controls label,.eligibility-controls label{font-size:10px;font-weight:700;color:#52645e;display:block}
+.finder-controls select,.eligibility-controls select{display:block;width:100%;margin-top:7px;min-height:44px;padding:10px;border:1px solid #d9d9ce;border-radius:5px;background:#fff;color:var(--ink);font:12px "DM Sans"}
+.finder-controls .button{min-height:44px;grid-column:1/3;border-radius:5px;justify-content:center}
+.finder-reset{min-height:44px;border:1px solid #d4d0c4;background:transparent;border-radius:5px;font:700 11px "DM Sans";color:#5e6c65;cursor:pointer}
+.eligibility-box{margin-top:25px;padding:22px;background:#fff;border:1px solid #e4e1d7;border-radius:7px}
+.eligibility-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:17px;align-items:end}
+.eligibility-controls .button{grid-column:1/-1;justify-content:center;min-height:44px;border-radius:5px;color:#172f34}
+.eligibility-results{margin-top:18px;padding:17px;background:#f8f7f2;border:1px solid #e8e4d9;border-radius:5px}
+.eligibility-result-head{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:12px;color:#304943}
+.eligibility-result-head span{font-size:9px;color:#9a7b3d;font-weight:700}
+.eligibility-results ul{list-style:none;padding:0;margin:12px 0}
+.eligibility-results li{padding:11px 0;border-top:1px solid #e7e4da}
+.eligibility-results li a{font-size:12px;font-weight:700;color:#34534c}
+.eligibility-results li small{display:block;margin-top:4px;font-size:10px;color:#77847d}
+.eligibility-results>p{font-size:11px;line-height:1.6;color:#687770}
+.eligibility-results .eligibility-disclaimer{padding-top:12px;border-top:1px solid #e7e4da;color:#8b7650}
+@media(max-width:700px){.finder-controls,.eligibility-controls{grid-template-columns:1fr}.finder-controls .button,.eligibility-controls .button{grid-column:1}.finder-heading{display:block}.finder-mark{display:block;margin-top:12px}.eligibility-box{padding:16px}}
