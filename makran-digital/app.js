@@ -188,6 +188,32 @@ document.querySelectorAll(".document-checklist").forEach(list=>{
  const update=()=>{const boxes=[...list.querySelectorAll('input[type="checkbox"]')];const done=boxes.filter(box=>box.checked).length;if(progress)progress.textContent=done+" of "+boxes.length+" prepared";};
  list.addEventListener("change",update);update();
 });
+const practiceQuiz=document.querySelector("#practice-quiz");
+practiceQuiz?.addEventListener("submit",event=>{
+ event.preventDefault();
+ const questions=[...practiceQuiz.querySelectorAll(".quiz-question")];
+ let score=0,answered=0;
+ questions.forEach((question,index)=>{
+  const selected=question.querySelector('input[type="radio"]:checked');
+  const correct=question.dataset.answer;
+  if(selected){answered++;if(selected.value===correct)score++}
+  question.classList.remove("quiz-correct","quiz-incorrect");
+  question.classList.add(selected&&selected.value===correct?"quiz-correct":"quiz-incorrect");
+  let feedback=question.querySelector(".quiz-explanation");
+  if(!feedback){feedback=document.createElement("p");feedback.className="quiz-explanation";question.append(feedback)}
+  feedback.textContent=(selected&&selected.value===correct?"Correct. ":"Review. ")+(question.dataset.explanation||"");
+ });
+ const result=document.querySelector("#quiz-results");
+ const percent=Math.round(score/questions.length*100);
+ const message=percent>=80?"Strong work. Review the explanations and keep practising.":percent>=50?"Good start. Review the questions you missed and practise again.":"Keep going. Review the explanations, revise the topics and try again.";
+ result.hidden=false;
+ result.innerHTML="<b>Your score: "+score+" / "+questions.length+" ("+percent+"%)</b><span>"+answered+" of "+questions.length+" questions answered. "+message+"</span>";
+ result.scrollIntoView({behavior:"smooth",block:"nearest"});
+});
+practiceQuiz?.addEventListener("reset",()=>{
+ practiceQuiz.querySelectorAll(".quiz-question").forEach(q=>{q.classList.remove("quiz-correct","quiz-incorrect");q.querySelector(".quiz-explanation")?.remove()});
+ const result=document.querySelector("#quiz-results");if(result){result.hidden=true;result.textContent=""}
+});
 document.querySelector("#year").textContent=new Date().getFullYear();render();loadLivePosts();
 
 
