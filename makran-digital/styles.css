@@ -172,3 +172,29 @@ body.auth-locked> :not(#access-gate){visibility:hidden!important;pointer-events:
 .quiz-results span{font-size:11px;line-height:1.6;color:#5e7068;margin-top:5px}
 @media(max-width:900px){.test-centre-layout{grid-template-columns:1fr}.test-plan{order:2}}
 @media(max-width:620px){.test-plan,.practice-quiz{padding:16px}.quiz-head{flex-direction:column}.quiz-actions{flex-wrap:wrap}}
+
+
+/* Career Guidance Centre: inclusive academic-stream pathways */
+.career-centre{background:#f8f6f0}
+.career-intro{max-width:900px;padding:17px 20px;background:#fff;border-left:3px solid var(--gold);margin:0 0 22px}
+.career-intro b{font:800 13px Manrope;color:var(--ink)}
+.career-intro p{font-size:11px;line-height:1.7;color:#6b7a74;margin:6px 0 0}
+.career-stream-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.career-stream{background:#fff;border:1px solid #e7e3d9;border-radius:8px;padding:20px;min-width:0}
+.career-stream>span{font-size:9px;letter-spacing:.12em;font-weight:800;color:#967744}
+.career-stream h3{font:800 18px/1.25 Manrope;letter-spacing:-.03em;color:var(--ink);margin:10px 0 7px}
+.career-stream>p{font-size:11px;line-height:1.65;color:#718079;min-height:55px;margin:0 0 12px}
+.career-stream details{border-top:1px solid #ece9e0;padding-top:12px}
+.career-stream summary{font-size:11px;font-weight:800;color:#80683d;cursor:pointer}
+.career-stream details ul{padding-left:17px;margin:12px 0 2px}
+.career-stream details li{font-size:10px;line-height:1.65;color:#586b64;margin:8px 0}
+.qualification-paths{margin-top:24px;padding:22px;background:#e9eee8;border-radius:8px}
+.qualification-paths h3{font:800 18px Manrope;color:var(--ink);margin:0 0 15px}
+.qualification-paths>div{display:grid;grid-template-columns:190px 1fr;gap:14px;padding:11px 0;border-top:1px solid #d7e0d6}
+.qualification-paths b{font-size:11px;color:#38584b}
+.qualification-paths span{font-size:11px;line-height:1.6;color:#5f7068}
+.career-next-steps{margin-top:18px;padding:18px 20px;background:#f1eadd;border:1px solid #e7dcc7;border-radius:6px}
+.career-next-steps b{font-size:12px;color:#795d31}
+.career-next-steps p{font-size:11px;line-height:1.7;color:#6f6657;margin:6px 0 0}
+@media(max-width:900px){.career-stream-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.career-stream-grid{grid-template-columns:1fr}.career-stream{padding:17px}.career-stream>p{min-height:0}.qualification-paths{padding:16px}.qualification-paths>div{grid-template-columns:1fr;gap:4px}}
