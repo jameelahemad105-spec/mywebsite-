@@ -97,6 +97,7 @@
             </div>
             <label>Father's name<input name="fatherName" required maxlength="100" placeholder="Father's full name"></label>
             <label>Email address<input name="email" type="email" required maxlength="160" autocomplete="email" placeholder="you@example.com"></label>
+            <label>Password<input name="password" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters"></label>
             <label>Phone number<input name="phone" type="tel" required maxlength="25" autocomplete="tel" placeholder="+92 3XX XXXXXXX"></label>
             <div class="profile-form-grid">
               <label>Country<input name="country" required maxlength="80" autocomplete="country-name" placeholder="Country"></label>
@@ -120,7 +121,7 @@
             <button class="button button-dark" type="submit">Create preview profile <span>↗</span></button>
             <p class="form-feedback" id="account-feedback" role="status">This preview saves a basic profile in this browser only. It is not a real online account.</p>
           </form>
-          <form id="demo-signin" hidden><label>Email address<input name="email" type="email" required placeholder="Use the email from your preview profile"></label><button class="button button-dark" type="submit">Open preview profile <span>↗</span></button><p class="form-feedback">Preview sign-in only works in this browser and is not secure authentication.</p></form>
+          <form id="demo-signin" hidden><label>Email address<input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label><label>Password<input name="password" type="password" required minlength="8" autocomplete="current-password" placeholder="Your password"></label><button class="button button-dark" type="submit">Sign in securely <span>↗</span></button><p class="form-feedback" role="status">Sign in with your Makran Digital email and password.</p></form>
           <div id="demo-dashboard" hidden></div>
         </div>
       </div>
@@ -128,5 +129,8 @@
   </main>
 
   <footer><div class="footer-inner"><a class="brand footer-brand" href="#home"><span class="brand-mark">M</span><span>MAKRAN <b>DIGITAL</b><small>CONNECTING PEOPLE. OPENING OPPORTUNITIES.</small></span></a><p>Made for the ambitions of people across Makran and beyond.</p><span>© <span id="year"></span> MAKRAN DIGITAL</span></div><div class="footer-owner"><span>FOUNDER & PROJECT LEAD</span><strong>Jameel Ahemad</strong><small>Makran Digital · Independent community opportunity platform</small></div><div class="footer-note">Makran Digital is an independent opportunity information hub, not a scholarship provider or testing authority. Always verify eligibility, acceptance, fees and deadlines on the official provider's website. Never share passwords, OTPs or payment details with unverified agents. This preview does not provide secure online accounts yet.</div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./app.js"></script>
+  <script src="./auth.js"></script>
 </body>
 </html>
