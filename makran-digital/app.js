@@ -104,7 +104,7 @@ function render(){
   if(finderFunding&&!hay.includes(normalizeSearch(finderFunding).split(" ")[0]))return false;
   return !terms.length||terms.every(term=>hay.includes(term));
  });
- grid.innerHTML=filtered.map(p=>{const url=safeUrl(p.url);const req=(p.requirements||["Exact eligibility criteria vary by programme and application cycle. Read the official provider notice before applying."]).map(x=>"<li>"+escapeHtml(x)+"</li>").join("");const reqNote=escapeHtml(p.requirementsNote||"Requirements may change between application cycles. Always confirm the latest official notice.");return '<article class="op-card"><div class="op-top"><span class="op-category">'+escapeHtml(labels[p.category]||"Student resource")+'</span><span class="op-date">'+escapeHtml(p.type||"RESOURCE")+'</span></div><h3>'+escapeHtml(p.title)+'</h3><p>'+escapeHtml(p.description)+'</p><details class="scholarship-requirements"><summary>View eligibility & requirements</summary><ul>'+req+'</ul><p class="requirements-note">'+reqNote+'</p></details><div class="op-foot"><span>⌖ '+escapeHtml(p.location||"Online")+'</span>'+(url?'<a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Open official source ↗</a>':'<span>Link unavailable</span>')+'</div></article>'}).join("");
+ grid.innerHTML=filtered.map(p=>{const url=safeUrl(p.url);const req=(p.requirements||["Exact eligibility criteria vary by programme and application cycle. Read the official provider notice before applying."]).map(x=>"<li>"+escapeHtml(x)+"</li>").join("");const reqNote=escapeHtml(p.requirementsNote||"Requirements may change between application cycles. Always confirm the latest official notice.");return '<article class="op-card"><div class="op-top"><span class="op-category">'+escapeHtml(labels[p.category]||"Student resource")+'</span><span class="op-date">'+escapeHtml(p.type||"RESOURCE")+'</span></div><h3>'+escapeHtml(p.title)+'</h3><p>'+escapeHtml(p.description)+'</p><details class="scholarship-requirements"><summary>View eligibility & requirements</summary><ul>'+req+'</ul><p class="requirements-note">'+reqNote+'</p></details><div class="op-foot"><button type="button" class="save-opportunity" data-save-id="'+escapeHtml(p.id)+'">＋ Save</button><span>⌖ '+escapeHtml(p.location||"Online")+'</span>'+(url?'<a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Open official source ↗</a>':'<span>Link unavailable</span>')+'</div></article>'}).join("");
  const empty=document.querySelector("#empty-state");
  empty.hidden=!raw;
  if(raw){
@@ -168,6 +168,16 @@ document.querySelector("#submit-form").addEventListener("submit",async event=>{
  if(!SUPABASE_URL.startsWith("https://")||SUPABASE_ANON_KEY.startsWith("YOUR_")){feedback.textContent="Online submissions are not enabled yet. The platform owner must connect the database. You can still browse the directory.";return}
  const data=Object.fromEntries(new FormData(form).entries());data.url=safeUrl(data.url)||null;data.status="pending";button.disabled=true;button.textContent="Sending...";
  try{const sessionResult=await window.makranSupabase?.auth.getSession();const accessToken=sessionResult?.data?.session?.access_token;if(!accessToken){feedback.textContent="Please create an account or sign in before submitting an opportunity.";return}const response=await fetch(SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/"+TABLE,{method:"POST",headers:{apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+accessToken,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(data)});if(!response.ok)throw new Error("Submission was not accepted");form.reset();feedback.textContent="Thank you! Your student resource has been received and is waiting for review."}catch(error){feedback.textContent="We couldn't send this submission. Please check the database setup and try again."}finally{button.disabled=false;button.innerHTML='Send for review <span>↗</span>'}
+});
+document.addEventListener("click",async event=>{
+ const button=event.target.closest(".save-opportunity");
+ if(!button)return;
+ const opportunity=posts.find(item=>String(item.id)===button.dataset.saveId);
+ if(!opportunity)return;
+ if(typeof window.makranSaveOpportunity!=="function"){alert("Please sign in to save opportunities.");return}
+ button.disabled=true;
+ try{await window.makranSaveOpportunity(opportunity);button.textContent="✓ Saved";button.classList.add("is-saved")}
+ catch(error){alert(error.message||"Could not save this opportunity.");button.disabled=false}
 });
 searchInput.addEventListener("input",()=>{if(searchInput.value.trim())categoryFilter.value="all";render()});categoryFilter.addEventListener("change",render);
 document.querySelectorAll("[data-shortcut]").forEach(a=>a.addEventListener("click",()=>{categoryFilter.value=a.dataset.shortcut;render()}));
