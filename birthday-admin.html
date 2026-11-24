@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Birthday Results | Private Admin</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:32px 18px;background:#fff8f3;color:#29243a;font:16px Arial,sans-serif}.wrap{max-width:900px;margin:auto}.panel{background:white;border:1px solid #eee5e4;border-radius:18px;padding:24px;box-shadow:0 15px 45px #53354a12}h1{margin-top:0}p{color:#82798c}.row{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}input,button{padding:12px;border:1px solid #ddd;border-radius:9px;font:inherit}input{min-width:220px;flex:1}button{background:#74536f;color:white;border:0;cursor:pointer}button.secondary{background:#eee5e4;color:#29243a}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{text-align:left;padding:12px;border-bottom:1px solid #eee5e4}small{color:#82798c}#results{overflow:auto}#status{min-height:24px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body><main class="wrap"><section class="panel">
+<h1>🎂 Birthday Quiz Results</h1>
+<p>Private dashboard. Sign in with the owner account to see submitted visitor names and scores.</p>
+<div id="login">
+<div class="row"><input id="email" type="email" placeholder="Admin email" autocomplete="username"><input id="password" type="password" placeholder="Password" autocomplete="current-password"></div>
+<button id="sign-in">Sign in</button>
+</div>
+<div id="tools" hidden><div class="row"><button id="refresh">Refresh results</button><button id="sign-out" class="secondary">Sign out</button></div>
+<div id="results"><table><thead><tr><th>Visitor</th><th>Score</th><th>Submitted</th></tr></thead><tbody id="rows"></tbody></table></div>
+</div><p id="status" role="status">Database setup is required before sign-in.</p>
+<small>Only the configured owner email can read results. Visitors can submit a name and score; their answers and messages are not collected.</small>
+</section></main>
+<script>
+const SUPABASE_URL="YOUR_SUPABASE_PROJECT_URL";
+const SUPABASE_ANON_KEY="YOUR_SUPABASE_ANON_KEY";
+const configured=SUPABASE_URL.startsWith("https://")&&!SUPABASE_ANON_KEY.startsWith("YOUR_");
+const status=document.getElementById("status");
+let client=null;
+if(configured&&window.supabase) client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+document.getElementById("sign-in").addEventListener("click",async()=>{
+ if(!client){status.textContent="Add your Supabase URL and anon key to this page first.";return;}
+ status.textContent="Signing in…";
+ const {error}=await client.auth.signInWithPassword({email:document.getElementById("email").value,password:document.getElementById("password").value});
+ if(error){status.textContent=error.message;return;}
+ document.getElementById("login").hidden=true;document.getElementById("tools").hidden=false;await loadResults();
+});
+async function loadResults(){
+ if(!client)return;
+ status.textContent="Loading results…";
+ const {data,error}=await client.from("birthday_results").select("visitor_name,score,created_at").order("created_at",{ascending:false});
+ if(error){status.textContent=error.message;return;}
+ const rows=document.getElementById("rows");rows.replaceChildren();
+ data.forEach(item=>{const tr=document.createElement("tr");[item.visitor_name,item.score+"/10",new Date(item.created_at).toLocaleString()].forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.appendChild(td);});rows.appendChild(tr);});
+ status.textContent=data.length+" result(s) found.";
+}
+document.getElementById("refresh").addEventListener("click",loadResults);
+document.getElementById("sign-out").addEventListener("click",async()=>{await client.auth.signOut();document.getElementById("login").hidden=false;document.getElementById("tools").hidden=true;status.textContent="Signed out.";});
+if(!configured)status.textContent="Setup needed: add the Supabase project URL and anon key, then run birthday-results-schema.sql.";
+</script></body></html>
