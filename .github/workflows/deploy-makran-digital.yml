@@ -1,3 +1,4 @@
+# Each push creates a fresh run with one github-pages artifact.
 name: Deploy Makran Digital to GitHub Pages
 
 on:
