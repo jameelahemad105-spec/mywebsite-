@@ -89,8 +89,23 @@
         <div class="account-panel" id="account-panel">
           <div class="account-tabs"><button type="button" class="account-tab active" data-tab="signup">Create account</button><button type="button" class="account-tab" data-tab="signin">Sign in</button></div>
           <form id="demo-signup">
-            <label>Full name<input name="name" required maxlength="100" placeholder="Your full name"></label>
-            <label>Email address<input name="email" type="email" required maxlength="160" placeholder="you@example.com"></label>
+            <div class="profile-form-grid">
+              <label>First name<input name="firstName" required maxlength="60" autocomplete="given-name" placeholder="First name"></label>
+              <label>Last name<input name="lastName" required maxlength="60" autocomplete="family-name" placeholder="Last name"></label>
+            </div>
+            <label>Father's name<input name="fatherName" required maxlength="100" placeholder="Father's full name"></label>
+            <label>Email address<input name="email" type="email" required maxlength="160" autocomplete="email" placeholder="you@example.com"></label>
+            <label>Phone number<input name="phone" type="tel" required maxlength="25" autocomplete="tel" placeholder="+92 3XX XXXXXXX"></label>
+            <div class="profile-form-grid">
+              <label>Country<input name="country" required maxlength="80" autocomplete="country-name" placeholder="Country"></label>
+              <label>Province / State<input name="province" required maxlength="80" placeholder="Province or state"></label>
+            </div>
+            <div class="profile-form-grid">
+              <label>Region / District<input name="region" required maxlength="100" placeholder="Region or district"></label>
+              <label>City<input name="city" required maxlength="100" autocomplete="address-level2" placeholder="City"></label>
+            </div>
+            <label>Residential address <span class="field-optional">(optional)</span><input name="address" maxlength="180" autocomplete="street-address" placeholder="Area / town / address"></label>
+            <label>Religion <span class="field-optional">(optional)</span><select name="religion"><option value="">Prefer not to say</option><option value="Islam">Islam</option><option value="Christianity">Christianity</option><option value="Hinduism">Hinduism</option><option value="Sikhism">Sikhism</option><option value="Buddhism">Buddhism</option><option value="Other">Other</option></select></label>
             <fieldset><legend>Choose your account type(s)</legend>
               <label class="role-option"><input type="checkbox" name="roles" value="Student"> <span><b>Student</b><small>Education, scholarships and admissions</small></span></label>
               <label class="role-option"><input type="checkbox" name="roles" value="Job Seeker"> <span><b>Job Seeker</b><small>Jobs, internships and career support</small></span></label>
