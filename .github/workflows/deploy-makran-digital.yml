@@ -1,4 +1,5 @@
 # Each push creates a fresh run with one github-pages artifact.
+# Deployment retry after repository workflow permissions were updated.
 name: Deploy Makran Digital to GitHub Pages
 
 on:
