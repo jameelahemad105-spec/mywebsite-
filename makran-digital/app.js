@@ -1,4 +1,4 @@
-/* Makran Digital student directory. Search covers this curated catalogue, not the whole live internet. */
+/* Makran Digital verified directory with free external web-search links. */
 const SUPABASE_URL="https://gamndpogjznmdccgmanr.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_I9gufeecgDjFz4ybGxLT_g_qG7SphB1";
 const TABLE="opportunities";
@@ -68,10 +68,17 @@ function render(){
  });
  grid.innerHTML=filtered.map(p=>{const url=safeUrl(p.url);return '<article class="op-card"><div class="op-top"><span class="op-category">'+escapeHtml(labels[p.category]||"Student resource")+'</span><span class="op-date">'+escapeHtml(p.type||"RESOURCE")+'</span></div><h3>'+escapeHtml(p.title)+'</h3><p>'+escapeHtml(p.description)+'</p><div class="op-foot"><span>⌖ '+escapeHtml(p.location||"Online")+'</span>'+(url?'<a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Open official source ↗</a>':'<span>Link unavailable</span>')+'</div></article>'}).join("");
  const empty=document.querySelector("#empty-state");
- empty.hidden=filtered.length>0;
- if(!filtered.length&&raw){
-  const webUrl="https://www.google.com/search?q="+encodeURIComponent(raw+" scholarship students Pakistan official");
-  empty.innerHTML='<b>No exact match in our verified directory yet.</b><br>We do not want to show you made-up opportunities. Try another keyword, clear the category filter, or search the wider web for this topic.<br><a class="text-link" style="color:#8a6b35" href="'+webUrl+'" target="_blank" rel="noopener noreferrer">Search the web for “'+escapeHtml(raw)+'” ↗</a>';
+ empty.hidden=!raw;
+ if(raw){
+  const query=raw+" Pakistan official information";
+  const socialQuery=raw+" announcement (site:facebook.com OR site:instagram.com OR site:linkedin.com OR site:x.com)";
+  const google="https://www.google.com/search?q="+encodeURIComponent(query);
+  const duck="https://duckduckgo.com/?q="+encodeURIComponent(query);
+  const bing="https://www.bing.com/search?q="+encodeURIComponent(query);
+  const social="https://www.google.com/search?q="+encodeURIComponent(socialQuery);
+  empty.innerHTML='<b>'+(filtered.length?'Want more information about “'+escapeHtml(raw)+'”?':'No exact match in our verified directory yet.')+'</b><br>Search the wider public internet for current announcements, test details, eligibility, preparation and deadlines. These searches open external search engines; results are not automatically verified by Makran Digital.<div class="web-search-links"><a class="text-link" style="color:#8a6b35" href="'+google+'" target="_blank" rel="noopener noreferrer">Google ↗</a><a class="text-link" style="color:#8a6b35" href="'+duck+'" target="_blank" rel="noopener noreferrer">DuckDuckGo ↗</a><a class="text-link" style="color:#8a6b35" href="'+bing+'" target="_blank" rel="noopener noreferrer">Bing ↗</a><a class="text-link" style="color:#8a6b35" href="'+social+'" target="_blank" rel="noopener noreferrer">Public social-media announcements ↗</a></div>';
+ } else {
+  empty.innerHTML='<b>Search the verified directory or explore the wider internet.</b>';
  }
  resultCount.textContent=filtered.length+" resource"+(filtered.length===1?"":"s")+" found";
 }
