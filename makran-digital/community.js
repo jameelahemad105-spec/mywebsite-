@@ -37,6 +37,7 @@
    button.textContent="Reported";setMessage("Thank you. Your report has been recorded.");
   }));
  }
+ root.querySelector("#community-refresh").addEventListener("click",loadPosts);
  form.addEventListener("submit",async event=>{
   event.preventDefault();
   if(!currentUser){setMessage("Please sign in again to publish a post.",true);return;}
