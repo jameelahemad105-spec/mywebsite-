@@ -91,8 +91,9 @@ document.querySelector("#year").textContent=new Date().getFullYear();render();lo
  const feedback=document.querySelector("#account-feedback"),dashboard=document.querySelector("#demo-dashboard");
  const tabs=[...document.querySelectorAll(".account-tab")];
  const profileKey="makranDigitalPreviewProfile";
- const readProfile=()=>{try{return JSON.parse(localStorage.getItem(profileKey)||"null")}catch{return null}};
- const saveProfile=p=>localStorage.setItem(profileKey,JSON.stringify(p));
+ let memoryProfile=null;
+ const readProfile=()=>{try{return JSON.parse(localStorage.getItem(profileKey)||"null")||memoryProfile}catch{return memoryProfile}};
+ const saveProfile=p=>{memoryProfile=p;try{localStorage.setItem(profileKey,JSON.stringify(p));return true}catch(error){console.warn("Makran Digital could not write browser storage:",error);return false}};
  function showTab(tab){
   tabs.forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
   signup.hidden=tab!=="signup";signin.hidden=tab!=="signin";dashboard.hidden=true;
@@ -128,16 +129,27 @@ document.querySelector("#year").textContent=new Date().getFullYear();render();lo
    const email=dashboard.querySelector("#alerts-email").value.trim();
    if(dashboard.querySelector("#alerts-enabled").checked&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){dashboard.querySelector("#alert-feedback").textContent="Enter a valid email address.";return}
    profile.alerts={enabled:dashboard.querySelector("#alerts-enabled").checked,email,categories:[...dashboard.querySelectorAll(".alert-category:checked")].map(x=>Number(x.value)),daysBefore:2};
-   saveProfile(profile);dashboard.querySelector("#alert-feedback").textContent="Preferences saved in this browser. Real email alerts will activate after backend integration.";
+   const savedToBrowser=saveProfile(profile);dashboard.querySelector("#alert-feedback").textContent=savedToBrowser?"Preferences saved in this browser. Real email alerts still need backend integration.":"Preferences are active for this session, but browser storage is blocked; they may be lost after reload.";
    dashboard.querySelector(".dash-stats div:nth-child(3) b").textContent=profile.alerts.enabled?"ON":"OFF";
   });
   dashboard.querySelector("#save-profile").addEventListener("click",()=>{
+   const required=["firstName","lastName","fatherName","phone","country","province","region","city"];
+   for(const key of required){
+    const field=dashboard.querySelector("#profile-"+key);
+    if(!field||!field.value.trim()){
+     dashboard.querySelector("#profile-feedback").textContent="Please complete all required profile fields before saving.";
+     if(field)field.focus();
+     return;
+    }
+   }
    ["firstName","lastName","fatherName","phone","country","province","region","city","address","religion"].forEach(key=>{
     const field=dashboard.querySelector("#profile-"+key);if(field)profile[key]=field.value.trim();
    });
    profile.name=[profile.firstName,profile.lastName].filter(Boolean).join(" ")||profile.name;
-   saveProfile(profile);
-   dashboard.querySelector("#profile-feedback").textContent="Profile preview updated on this device.";
+   const savedToBrowser=saveProfile(profile);
+   dashboard.querySelector("#profile-feedback").textContent=savedToBrowser
+    ?"Profile saved successfully on this device. It is not yet synced to an online account."
+    :"Your changes are active for this session, but this browser blocked storage. They may be lost when you close or reload this page.";
    dashboard.querySelector(".dash-welcome").textContent="Welcome, "+(profile.firstName||profile.name);
   });
  }
@@ -146,7 +158,7 @@ document.querySelector("#year").textContent=new Date().getFullYear();render();lo
   if(!roles.length){feedback.textContent="Please select at least one account type.";return}
   const firstName=String(data.get("firstName")).trim(),lastName=String(data.get("lastName")).trim(),email=String(data.get("email")).trim().toLowerCase();
   const profile={firstName,lastName,name:[firstName,lastName].filter(Boolean).join(" "),fatherName:String(data.get("fatherName")).trim(),email,phone:String(data.get("phone")).trim(),country:String(data.get("country")).trim(),province:String(data.get("province")).trim(),region:String(data.get("region")).trim(),city:String(data.get("city")).trim(),address:String(data.get("address")).trim(),religion:String(data.get("religion")).trim(),roles,alerts:{enabled:false,email,categories:[0,1,2,3,4],daysBefore:2},saved:[]};
-  saveProfile(profile);showDashboard(profile);
+  const savedToBrowser=saveProfile(profile);showDashboard(profile);feedback.textContent=savedToBrowser?"Preview profile created and saved on this device. This is not a secure online account.":"Preview profile opened for this session, but browser storage is blocked; it may be lost after reload.";
  });
  signin.addEventListener("submit",event=>{
   event.preventDefault();const email=String(new FormData(signin).get("email")).trim().toLowerCase(),profile=readProfile();
